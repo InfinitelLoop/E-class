@@ -1,0 +1,14 @@
+.ClassCard {
+    width: 350px;
+    height: 250px;
+    border-radius: 30px;
+    background-color: #d4d4d4;
+    /* border: 1px solid #c4c4c4; */
+    padding: 12px;
+    margin: 40px;
+    border: 0.0625 remsolid #dadce0;
+    
+}
+.ClassCard:hover{
+    text-decoration: underline;
+}

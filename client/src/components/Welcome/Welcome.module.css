@@ -1,0 +1,23 @@
+.Background{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+}
+
+.Welcome{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+}
+
+.Slide{
+    left: 200%;
+    transition: ease all 0.3s;
+}

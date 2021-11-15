@@ -1,0 +1,47 @@
+.SignInModal{
+    position: fixed;
+    left: -100%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    background-color: #e4e4e4;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0px 8px 15px rgba(0,0,0,0.2);
+}
+
+.Visible{
+    left: 50%;
+    transition: ease all 0.3s;
+}
+
+.ErrorLabel{
+    color: red;
+    font-size: 12px;
+    position: relative;
+    margin-left: 10px;
+}
+
+.InputContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.Label{
+    position: relative;
+    top: 6px;
+    padding-left: 8px;
+    font-weight: bold;
+}
+
+.SignUp{
+    color: #185473;
+    cursor: pointer;
+}
+
+.SignUp:hover{
+    text-decoration: underline;
+}
