@@ -42,7 +42,7 @@ const SignUp = (props) => {
                     setEmail(initialState);
 
                 } else {
-                    alert('ERROR');
+                    alert(res.data);
                 }
             })
             .catch(err => {
@@ -68,41 +68,41 @@ const SignUp = (props) => {
         switch (field) {
             case 'name':
                 let updatedName = { ...name };
+                updatedName.value = value;
                 if (!updatedName.touched) {
                     updatedName.touched = true;
                 }
                 updatedName.valid = value.trim() === '' ? false : true;
-                updatedName.value = value;
                 setName(updatedName);
                 break;
 
             case 'username':
                 let updatedUsername = { ...username };
+                updatedUsername.value = value;
                 if (!updatedUsername.touched) {
                     updatedUsername.touched = true;
                 }
                 updatedUsername.valid = value.trim() === '' ? false : true;
-                updatedUsername.value = value;
                 setUsername(updatedUsername);
                 break;
 
             case 'password':
                 let updatePassword = { ...password };
+                updatePassword.value = value;
                 if (!updatePassword.touched) {
                     updatePassword.touched = true;
                 }
                 updatePassword.valid = value.trim() === '' ? false : true;
-                updatePassword.value = value;
                 setPassword(updatePassword);
                 break;
 
             case 'email':
                 let updatedEmail = { ...email };
+                updatedEmail.value = value;
                 if (!updatedEmail.touched) {
                     updatedEmail.touched = true;
                 }
                 updatedEmail.valid = value.trim() === '' ? false : true;
-                updatedEmail.value = value;
                 setEmail(updatedEmail);
                 break;
         }
@@ -134,7 +134,7 @@ const SignUp = (props) => {
             </div>
             <div className={classes.InputContainer}>
                 <label className={classes.Label}>E-mail</label>
-                <Input value={email.value} type='email' placeholder='' width='300px' touched={email.touched} valid={name.valid} changed={emailChangedHandler} />
+                <Input value={email.value} type='email' placeholder='' width='300px' touched={email.touched} valid={email.valid} changed={emailChangedHandler} />
             </div>
             <Button clicked={signUp} width="200px">Sign Up</Button>
             <p style={{ marginBottom: 30 }}>Already a user? <label className={classes.SignIn} onClick={props.signInInstead}>Sign In</label></p>

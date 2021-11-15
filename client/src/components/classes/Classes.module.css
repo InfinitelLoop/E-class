@@ -1,9 +1,34 @@
-.classes{
-    position: fixed;
-    left: 20%;
-    padding: 45px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+.classes {
+  position: relative;
+  top: 10%;
+  padding: 40px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  overflow: auto;
+  height: 100%;
+  width: 100vw;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: #e4e4e4;
+  height: 50%;
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 7px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }

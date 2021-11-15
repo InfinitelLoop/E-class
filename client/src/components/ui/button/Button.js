@@ -20,6 +20,18 @@ const Button = (props) => {
     if(props.color){
         style['color'] = props.color;
     }
+    if(props.marginBottom){
+        style['marginBottom'] = props.marginBottom;
+    }
+    if(props.marginTop){
+        style['marginTop'] = props.marginTop;
+    }
+    if(props.marginRight){
+        style['marginRight'] = props.marginRight;
+    }
+    if(props.marginLeft){
+        style['marginLeft'] = props.marginLeft;
+    }
 
     let attachedClasses = [classes.button];
     if(props.type==="Secondary"){
