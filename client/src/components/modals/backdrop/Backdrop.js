@@ -13,7 +13,7 @@ const Backdrop = (props) => {
         top: "0px",
         height: "100vh",
         width: "100vw",
-        zIndex: "10"
+        zIndex: "500"
       }}
 
       onClick={props.closeModal}

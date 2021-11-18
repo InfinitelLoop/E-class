@@ -4,35 +4,37 @@ import SignIn from '../signIn/SignIn';
 import SignUp from '../signUp/SignUp';
 import classes from './Welcome.module.css';
 import Button from '../ui/button/Button';
+import ErrorBar from '../ui/toaster/ErrorBar';
+import Logo from '../../assets/images/logo1.svg';
 
 const Welcome = (props) => {
 
-    
+
     const [openSignInModal, setOpenSignInModal] = useState(false);
     const [openSignUpModal, setOpenSignUpModal] = useState(false);
-    
+
     function signIn() {
         setOpenSignInModal(true);
         console.log('opening signin modal')
     }
-    
+
     function signUp() {
         setOpenSignUpModal(true);
         console.log('opening signup modal')
     }
 
-    function signUpInstead(){
+    function signUpInstead() {
         setOpenSignInModal(false);
         setOpenSignUpModal(true);
     }
-    
-    function signInInstead(){
+
+    function signInInstead() {
         setOpenSignUpModal(false);
         setOpenSignInModal(true);
     }
-    
-    let attachedClass=[classes.Welcome];
-    if(openSignInModal || openSignUpModal){
+
+    let attachedClass = [classes.Welcome];
+    if (openSignInModal || openSignUpModal) {
         attachedClass.push(classes.Slide);
     }
 
@@ -40,16 +42,19 @@ const Welcome = (props) => {
         <div style={{
             backgroundImage: `url(${Cover})`,
         }} className={classes.Background}>
-            <SignIn visible={openSignInModal} signUpInstead={signUpInstead} login={ props.login}/>
+            <SignIn visible={openSignInModal} signUpInstead={signUpInstead} />
             <SignUp visible={openSignUpModal} signInInstead={signInInstead} />
             <div className={attachedClass.join(' ')}>
 
+                <img src={Logo} alt="Logo" style={{ width: '200px'}} 
+                />
                 <label style={{
                     color: "#fff",
                     fontSize: "88px",
                     textAlign: "center",
                     marginBottom: 24
                 }}>Welcome to E-Class</label>
+
                 <p style={{
                     color: "#fff",
                     fontSize: "22px",
@@ -62,10 +67,10 @@ const Welcome = (props) => {
                 }}>
                     <Button type="Secondary" clicked={signIn} height="50px" width="250px" >
                         Sign In
-                </Button>
+                    </Button>
                     <Button clicked={signUp} backgroundColor="#6bd4cd" height="50px" width="250px" color="#185473">
                         Sign Up
-                </Button>
+                    </Button>
                 </label>
             </div>
         </div>

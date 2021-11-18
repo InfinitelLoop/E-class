@@ -15,7 +15,7 @@
 
 .Visible{
     left: 50%;
-    transition: ease all 0.3s;
+    transition: ease-in all 0.3s;
 }
 
 .ErrorLabel{

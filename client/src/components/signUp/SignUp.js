@@ -4,7 +4,9 @@ import axios from 'axios';
 import Button from '../ui/button/Button';
 import Input from '../ui/input/Input';
 import classes from './SignUp.module.css';
-import {encryptPassword} from '../../utility/common';
+import { encryptPassword } from '../../utility/common';
+import actionType from '../../store/actionType';
+import { useDispatch } from 'react-redux';
 
 const SignUp = (props) => {
     let initialState = {
@@ -16,37 +18,58 @@ const SignUp = (props) => {
     const [username, setUsername] = useState(initialState);
     const [password, setPassword] = useState(initialState);
     const [email, setEmail] = useState(initialState);
+    const dispatch = useDispatch();
 
     let attachedClass = [classes.SignUpModal];
     if (props.visible) {
         attachedClass.push(classes.Visible);
     }
-
+    
     function signUp() {
 
         let obj = {
             name: name.value,
             username: username.value,
             password: encryptPassword(password.value),
-            email: email.value
+            email: email.value,
+            // myClasses: [], enrolledClasses: []
         }
 
         axios.post('http://localhost:3001/users/sign-up', obj)
             .then(res => {
                 if (res.data === "SUCCESS") {
-                    alert("Sign up Successful");
+                    dispatch({
+                        type: actionType.SHOW_SUCCESS_TOASTER,
+                        payload: "Sign up Successful"
+                    });
                     props.signInInstead();
                     setName(initialState);
                     setUsername(initialState);
                     setPassword(initialState);
                     setEmail(initialState);
 
-                } else {
-                    alert(res.data);
+                } else if(res.data==="Account with this username already exist.") {
+                    dispatch({
+                        type: actionType.SHOW_INFO_TOASTER,
+                        payload: res.data
+                    })
+                } else if(res.data==="Account with this email already exist.") {
+                    dispatch({
+                        type: actionType.SHOW_INFO_TOASTER,
+                        payload: res.data
+                    })
+                } else{
+                    dispatch({
+                        type: actionType.SHOW_ERROR_TOASTER,
+                        payload: "Something went wrong! Try again later."
+                    })
                 }
             })
             .catch(err => {
-                console.log('kya dikkat hai', err)
+                dispatch({
+                    type: actionType.SHOW_ERROR_TOASTER,
+                    payload: "Something went Wrong! Try again later."
+                })
             })
 
     }

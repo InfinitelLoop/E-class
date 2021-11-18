@@ -5,8 +5,10 @@ var router = express.Router();
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   axios.get("/users.json").then((dbRes) => {
-    let usersList = Object.values(dbRes.data);
-    res.send(usersList);
+    res.send({
+      status: "SUCCESS",
+      usersList: dbRes.data
+    });
   });
 });
 
@@ -20,11 +22,11 @@ router.post("/sign-up", function (req, res, next) {
     //checking for existing user
     let userValid = true;
     for (let index in usersList) {
-      if (usersList[index].username.toLower().trim() === reqObj.username.toLower().trim()) { 
+      if (usersList[index].username.toLowerCase().trim() === reqObj.username.toLowerCase().trim()) { 
         userValid = false;
         res.send("Account with this username already exist.");
         break;
-      } else if (usersList[index].email.toLower().trim() === reqObj.email.toLower().trim()) {
+      } else if (usersList[index].email.toLowerCase().trim() === reqObj.email.toLowerCase().trim()) {
         userValid = false;
         res.send("Account with this email already exist.");
         break;

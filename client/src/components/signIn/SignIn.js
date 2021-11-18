@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {decryptPassword} from '../../utility/common';
+import { decryptPassword } from '../../utility/common';
 import classes from './SignIn.module.css'
 import Input from '../ui/input/Input';
 import Button from '../ui/button/Button';
-import axios from '../../utility/myAxios';
+import axios from 'axios';
+import actionType from '../../store/actionType';
 
 const SignIn = (props) => {
     let initialState = {
@@ -14,6 +16,8 @@ const SignIn = (props) => {
     };
     const [username, setUsername] = useState(initialState);
     const [password, setPassword] = useState(initialState);
+
+    const dispatch = useDispatch();
 
     let attachedClass = [classes.SignInModal];
     if (props.visible) {
@@ -28,33 +32,65 @@ const SignIn = (props) => {
         validateInput(event.target.value, 'password');
     }
 
+    function signInUser() {
+
+        console.log(username.value);
+        let action = {
+            type: actionType.SIGN_IN,
+            payload: username.value
+        }
+        dispatch(action)
+    }
+
     function signIn() {
         axios.get('http://localhost:3001/users')
             .then(res => {
-                let usersList = res.data;
-                let usernameFound = false;
-                let passwordCorrect = false;
-                for (let index in usersList) {
-                    if (username.value === usersList[index].username) {
-                        usernameFound= true;
-                        if(password.value === decryptPassword(usersList[index].password)){
-                            passwordCorrect= true;
-                            props.login();
-                            setUsername(initialState);
-                            setPassword(initialState);
-                            break;
-                        } else {
-                            break;
+
+                if (res.data.status === 'SUCCESS') {
+                    let usersList = res.data.usersList;
+                    let usernameFound = false;
+                    let passwordCorrect = false;
+                    for (let index in usersList) {
+                        if (username.value === usersList[index].username) {
+                            usernameFound = true;
+                            if (password.value === decryptPassword(usersList[index].password)) {
+                                passwordCorrect = true;
+                                signInUser();
+                                dispatch({
+                                    type: actionType.SHOW_SUCCESS_TOASTER,
+                                    payload: "Signed in successfully"
+                                })
+                                setUsername(initialState);
+                                setPassword(initialState);
+                                break;
+                            } else {
+                                break;
+                            }
                         }
                     }
-                }
-                if(!usernameFound){
-                    alert('User does not exist');
-                } else if(!passwordCorrect){
-                    alert('Invalid credentials');
+                    if (!usernameFound) {
+                        dispatch({
+                            type: actionType.SHOW_ERROR_TOASTER,
+                            payload: "User does not exist"
+                        })
+                    } else if (!passwordCorrect) {
+                        dispatch({
+                            type: actionType.SHOW_ERROR_TOASTER,
+                            payload: "Invalid credentials"
+                        })
+                    }
+                } else {
+                    dispatch({
+                        type: actionType.SHOW_ERROR_TOASTER,
+                        payload: "Something went wrong! Try again later."
+                    })
                 }
             })
-            .catch(err => console.log('error while signing in'))
+            .catch(err => dispatch({
+                type: actionType.SHOW_ERROR_TOASTER,
+                payload: "Something went wrong! Try again later."
+            })
+            )
     }
 
     function validateInput(value, field) {

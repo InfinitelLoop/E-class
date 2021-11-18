@@ -23,6 +23,12 @@
     background-color: #004c72;
     transform: translateY(-4px);
 }
+.button:active {
+    transform: scale(0.98);
+    /* Scaling button to 0.98 to its original size */
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.4);
+    /* Lowering the shadow */
+}
 
 .secondary{
     background-color: #e3e3e3;
@@ -33,6 +39,13 @@
 .secondary:hover {
     background-color: #d4d4d4;
     transform: translateY(-4px);
+}
+
+.secondary:active {
+    transform: scale(0.98);
+    /* Scaling button to 0.98 to its original size */
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.4);
+    /* Lowering the shadow */
 }
 
 .icon{

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../../ui/input/Input";
 import Button from "../../ui/button/Button";
 import classes from "./CreateClass.module.css";
+import axios from "axios";
+import actionType from "../../../store/actionType";
+
 
 const CreateClass = (props) => {
   let initialState = {
@@ -14,6 +17,8 @@ const CreateClass = (props) => {
   const [subject, setSubject] = useState(initialState);
   const [section, setSection] = useState(initialState);
   const [roomNo, setRoomNo] = useState(initialState);
+  const username = useSelector(state => state.auth.username);
+  const dispatch = useDispatch();
 
   function inputChangedHandler(event, key) {
     let value = event.target.value;
@@ -37,6 +42,7 @@ const CreateClass = (props) => {
         break;
     }
   }
+
 
   function validateInput(value, key) {
     switch (key) {
@@ -84,7 +90,38 @@ const CreateClass = (props) => {
     }
   }
 
-  function createClass() {}
+  function close() {
+    setClassName(initialState);
+    setRoomNo(initialState);
+    setSection(initialState);
+    setSubject(initialState);
+    props.closeModal();
+  }
+
+  function createClass() {
+    let obj = {
+      classname: className.value,
+      section: section.value,
+      subject: subject.value,
+      room_no: roomNo.value,
+      username: username
+    }
+
+    axios.post('http://localhost:3001/classes/create', obj)
+      .then((res) => {
+        if (res.data.status === 'SUCCESS') {
+          setClassName(initialState);
+          setRoomNo(initialState);
+          setSection(initialState);
+          setSubject(initialState);
+          props.closeModal();
+          dispatch({
+             type: actionType.SHOW_SUCCESS_TOASTER,
+             payload: "Class created"
+            })
+        }
+      })
+  }
 
   return (
     <div className={classes.CreateClass} onClick={(event) => event.stopPropagation()}>
@@ -141,9 +178,14 @@ const CreateClass = (props) => {
         />
         {!roomNo.valid && roomNo.touched ? <label className={classes.ErrorLabel}>Required Field</label> : null}
       </div>
-      <Button clicked={createClass} width="200px" marginBottom='28px'>
-        Sign Up
-      </Button>
+      <div className={classes.ButtonContainer}>
+        <Button clicked={close} width="100px" marginBottom='28px' type='Secondary'>
+          Cancel
+        </Button>
+        <Button clicked={createClass} width="100px" marginBottom='28px'>
+          Create
+        </Button>
+      </div>
     </div>
   );
 };
