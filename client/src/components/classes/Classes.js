@@ -9,34 +9,92 @@ import Backdrop from "../modals/backdrop/Backdrop";
 import CreateClass from "../modals/createClassModal/CreateClass";
 import JoinClass from "../modals/joinClassModal/JoinClass";
 import actionType from "../../store/actionType";
+import HomeCover from "../../assets/images/HomeCover.svg";
+import Spinner from "../ui/spinner/Spinner";
+import ClassView from "../classView/ClassView";
 
 const Classes = (props) => {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [showJoinClassModal, setShowJoinClassModal] = useState(false);
-  const [enrolledClassCards, setEnrolledClassCards] = useState([]);
-  const [myClassCards, setMyClassCards] = useState([]);
+  const [showClassView, setShowClassView] = useState(false);
 
-  const username = useSelector(state => state.auth.username);
+  const loading = useSelector((state) => state.class.loading);
+  const enrolledClassCards = useSelector((state) => state.class.enrolledClasses);
+  const myClassCards = useSelector((state) => state.class.myClasses);
+  const username = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.post('http://localhost:3001/classes', {username : username})
-    .then(res => {
-      if(res.data.status==="SUCCESS"){
-        setEnrolledClassCards(res.data.enrolledClassesData);
-        setMyClassCards(res.data.myClassesData);
-      } else {
+    axios
+      .post("http://localhost:3001/classes", { username: username })
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          dispatch({
+            type: actionType.SET_CLASSES,
+            payload: {
+              enrolledClasses: res.data.enrolledClassesData,
+              myClasses: res.data.myClassesData,
+              loading: false,
+            },
+          });
+        } else {
+          dispatch({
+            type: actionType.SHOW_ERROR_TOASTER,
+            payload: "Something went Wrong! Try again later.",
+          });
+        }
+      })
+      .catch((err) => {
+        dispatch({
+          type: actionType.SET_CLASSES,
+          payload: {
+            enrolledClasses: [],
+            myClasses: [],
+            loading: false,
+          },
+        });
         dispatch({
           type: actionType.SHOW_ERROR_TOASTER,
-          payload: "Something went Wrong! Try again later."
+          payload: "Something went Wrong! Try again later.",
+        });
+      });
+  }, []);
+
+  function fetchClasses() {
+    axios
+      .post("http://localhost:3001/classes", { username: username })
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          dispatch({
+            type: actionType.SET_CLASSES,
+            payload: {
+              enrolledClasses: res.data.enrolledClassesData,
+              myClasses: res.data.myClassesData,
+              loading: false,
+            },
+          });
+        } else {
+          dispatch({
+            type: actionType.SHOW_ERROR_TOASTER,
+            payload: "Something went Wrong! Try again later.",
+          });
+        }
       })
-      }
-    })
-    .catch(err => dispatch({
-      type: actionType.SHOW_ERROR_TOASTER,
-      payload: "Something went Wrong! Try again later."
-  }))
-  }, [])
+      .catch((err) => {
+        dispatch({
+          type: actionType.SET_CLASSES,
+          payload: {
+            enrolledClasses: [],
+            myClasses: [],
+            loading: false,
+          },
+        });
+        dispatch({
+          type: actionType.SHOW_ERROR_TOASTER,
+          payload: "Something went Wrong! Try again later.",
+        });
+      });
+  }
 
   function openCreateModal() {
     setShowCreateClassModal(true);
@@ -55,39 +113,59 @@ const Classes = (props) => {
 
   return (
     <div className={classes.classes}>
-        
-      {showCreateClassModal ? <Backdrop closeModal={closeCreateModal} >
-        <CreateClass closeModal={closeCreateModal} />
-      </Backdrop>: null}
-      {showJoinClassModal ? <Backdrop closeModal={closeJoinModal} >
-        <JoinClass closeModal={closeJoinModal} />
-      </Backdrop>: null}
+      {showCreateClassModal ? (
+        <Backdrop closeModal={closeCreateModal}>
+          <CreateClass closeModal={closeCreateModal} fetchClasses={fetchClasses} />
+        </Backdrop>
+      ) : null}
+      {showJoinClassModal ? (
+        <Backdrop closeModal={closeJoinModal}>
+          <JoinClass closeModal={closeJoinModal} fetchClasses={fetchClasses} />
+        </Backdrop>
+      ) : null}
 
-  {enrolledClassCards.length===0 && myClassCards.length===0 ? <React.Fragment>
-    <Button
-    type="Secondary"
-    clicked={openCreateModal}
-    height="50px"
-    width="200px"
-    >
-    Create class
-  </Button>
-  <Button
-    clicked={openJoinModal}
-    backgroundColor="#6bd4cd"
-    height="50px"
-    width="200px"
-    color="#185473"
-    >
-    Join class
-  </Button> 
-    </React.Fragment>
-  : <React.Fragment>
-    {myClassCards.map(item => <ClassCard type='Teacher' name={item.classname} subject={item.subject} section ={item.section} roomNo={item.room_no}/>)}
-    {enrolledClassCards.map(item => <ClassCard type='Student' name={item.classname} subject={item.subject} section ={item.section} roomNo={item.room_no}/>)}
-  </React.Fragment>
-  }
-      
+      {loading ? (
+        <Spinner />
+      ) : enrolledClassCards.length === 0 && myClassCards.length === 0 ? (
+        <div className={classes.HomeContainer}>
+          <div className={classes.HomeCover}>
+            <img style={{ width: "100%", borderRadius: 30 }} src={HomeCover} alt=" " />
+          </div>
+          <div className={classes.ButtonContainer}>
+            <Button type="Secondary" clicked={openCreateModal} height="50px" width="200px">
+              Create class
+            </Button>
+            <Button clicked={openJoinModal} backgroundColor="#185473" height="50px" width="200px" color="white">
+              Join class
+            </Button>
+          </div>
+        </div>
+      ) : showClassView ? (
+        <ClassView close={() => setShowClassView(false)} />
+      ) : (
+        <React.Fragment>
+          {myClassCards.map((item) => (
+            <ClassCard
+              clicked={() => setShowClassView(true)}
+              type="Teacher"
+              name={item.classname}
+              subject={item.subject}
+              section={item.section}
+              roomNo={item.room_no}
+            />
+          ))}
+          {enrolledClassCards.map((item) => (
+            <ClassCard
+              clicked={() => setShowClassView(true)}
+              type="Student"
+              name={item.classname}
+              subject={item.subject}
+              section={item.section}
+              roomNo={item.room_no}
+            />
+          ))}
+        </React.Fragment>
+      )}
     </div>
   );
 };

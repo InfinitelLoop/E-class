@@ -10,6 +10,8 @@ let actionType = {
 
     SHOW_INFO_TOASTER: "show-info-toaster",
     HIDE_INFO_TOASTER: "hide-info-toaster",
+
+    SET_CLASSES: 'set-classes'
 }
 
 export default actionType;

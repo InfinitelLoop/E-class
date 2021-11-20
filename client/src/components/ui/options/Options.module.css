@@ -3,14 +3,14 @@
     min-width: 150px;
     position: absolute;
     z-index: 200;
-    margin-top: 200px;
-    margin-left: -150px;
+    margin-top: 150px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0px 8px 15px rgba(0,0,0,0.2);
 }
 
 .Option{
+    
     height: 40px;
     display: flex;
     justify-content: flex-start;

@@ -32,14 +32,14 @@
 
 .Inactive{
     text-decoration: none;
-    color: #4a80b0;
+    color: #185473;
     border-bottom: 2px solid #ddd;
 }
 
 .Inactive:hover{
     border-bottom: 2px solid #185473;
     text-decoration: none;
-    color: #4a80b0;
+    color: #185473;
 }
 
 a:active{
@@ -64,7 +64,42 @@ a:active{
 .AddIcon{
     width: 30px;
     padding: 10px;
-    background-color: #ccc;
     border-radius: 50%;
     cursor: pointer;
+    display: flex;
+}
+
+.AddIcon:hover{
+    background-color: #ccc;
+    
+}
+
+.Username{
+    font-size: 20px;
+    font-weight: 300;
+    margin: 18px;
+    max-width: 200px;
+    background-color: #e3e3e3;
+    border: 1px solid #04345c;
+    height: 32px;
+    padding: 8px;
+    border-radius: 32px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 150px;
+    cursor: pointer;
+    outline: none;
+    color: #185473;
+    font-weight: 600;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Username:hover{
+    background-color: #004c72;
+    color: #ddd;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.3);
+
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import classes from './Sidebar.module.css';
-import Button from '../ui/button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import actionType from '../../store/actionType';
 import Logo from '../../assets/images/logo1.svg';
@@ -10,17 +10,20 @@ import Options from '../ui/options/Options';
 import CreateClass from '../modals/createClassModal/CreateClass';
 import JoinClass from '../modals/joinClassModal/JoinClass';
 import Backdrop from '../modals/backdrop/Backdrop';
-
+import UserIcon from '../../assets/images/userIcon.svg';
+import axios from 'axios';
 
 function Sidebar(props) {
 
     const dispatch = useDispatch();
     const username = useSelector(state => state.auth.username);
     const [showAddOptions, setShowAddOptions] = useState(false);
-
+    const [showProfileOptions, setshowProfileOptions] = useState(false);
 
     const [showCreateClassModal, setShowCreateClassModal] = useState(false);
     const [showJoinClassModal, setShowJoinClassModal] = useState(false);
+
+    let navigate = useNavigate();
 
     function openCreateModal() {
         setShowCreateClassModal(true);
@@ -37,23 +40,65 @@ function Sidebar(props) {
         setShowJoinClassModal(false);
     }
 
-
-
     function signOut() {
         let action = {
             type: actionType.SIGN_OUT
         }
         dispatch(action);
+        dispatch({
+            type: actionType.SET_CLASSES,
+            payload: {
+                enrolledClasses: [],
+                myClasses: [],
+                loading: true
+            }
+        })
+        navigate("/");
+    }
+
+    function fetchClasses() {
+        axios.post('http://localhost:3001/classes', { username: username })
+            .then(res => {
+                if (res.data.status === "SUCCESS") {
+                    dispatch({
+                        type: actionType.SET_CLASSES,
+                        payload: {
+                            enrolledClasses: res.data.enrolledClassesData,
+                            myClasses: res.data.myClassesData,
+                            loading: false
+                        }
+                    })
+                } else {
+                    dispatch({
+                        type: actionType.SHOW_ERROR_TOASTER,
+                        payload: "Something went Wrong! Try again later."
+                    })
+                }
+            })
+            .catch(err => {
+                dispatch({
+                    type: actionType.SET_CLASSES,
+                    payload: {
+                        enrolledClasses: [],
+                        myClasses: [],
+                        loading: false
+                    }
+                })
+                dispatch({
+                    type: actionType.SHOW_ERROR_TOASTER,
+                    payload: "Something went Wrong! Try again later."
+                })
+            })
     }
 
     return (
         <div className={classes.sidebar}>
 
             {showCreateClassModal ? <Backdrop closeModal={closeCreateModal} >
-                <CreateClass closeModal={closeCreateModal} />
+                <CreateClass closeModal={closeCreateModal} fetchClasses={fetchClasses} />
             </Backdrop> : null}
             {showJoinClassModal ? <Backdrop closeModal={closeJoinModal} >
-                <JoinClass closeModal={closeJoinModal} />
+                <JoinClass closeModal={closeJoinModal} fetchClasses={fetchClasses} />
             </Backdrop> : null}
 
             <label className={classes.LogoContainer}>
@@ -72,15 +117,6 @@ function Sidebar(props) {
                     <li className={classes.li}>Classes</li>
                 </NavLink>
 
-                {/* <NavLink to="/my-subjects"
-                    className={classes.Inactive}
-                    activeClassName={classes.ActiveClass}
-                    activeStyle={{
-                        color: '#185473',
-                    }}>
-                    <li className={classes.li}>My Subjects</li>
-                </NavLink> */}
-
                 <NavLink to="/scheduler"
                     className={classes.Inactive}
                 // activeClassName={classes.ActiveClass}
@@ -90,27 +126,28 @@ function Sidebar(props) {
                 >
                     <li className={classes.li}>Scheduler</li>
                 </NavLink>
-
-                {/* <NavLink to="/settings"
-                    className={classes.Inactive}
-                    activeClassName={classes.ActiveClass}
-                    activeStyle={{
-                        color: '#185473',
-                    }}>
-                    <li className={classes.li}>Settings</li>
-                </NavLink> */}
             </ul>
 
             <div className={classes.ProfileContainer}>
                 <div className={classes.AddIcon}><img src={AddIcon} alt='add' onClick={() => setShowAddOptions(!showAddOptions)} /></div>
                 {showAddOptions ? <Options options={[
-                    { value: "Create", clicked: openCreateModal },
-                    { value: "Join", clicked: openJoinModal }
-                ]} style={{
+                    { value: "Create Class", clicked: openCreateModal },
+                    { value: "Join Class", clicked: openJoinModal }
+                ]} closeOptions={() => setShowAddOptions(false)} open={showAddOptions} marginLeft='-150px' marginTop='200px' /> : null}
+                <div className={classes.Username}
+                    onClick={() => setshowProfileOptions(!showProfileOptions)}>
+                    <label style={{ display: 'flex', width: 38, border: '1px solid #ddd', borderRadius: 19, backgroundColor: '#ddd', marginRight: 10 }}>
+                        <img src={UserIcon} alt='userIcon' />
+                    </label>
+                    {username}
 
-                }} /> : null}
-                {username}
-                <Button clicked={signOut} width="100px">Sign Out</Button>
+                </div>
+
+                {showProfileOptions ? <Options options={[{ value: "Sign out", clicked: signOut }]}
+                    closeOptions={() => setshowProfileOptions(false)} open={showProfileOptions}
+                    marginLeft='80px'
+                /> : null}
+
             </div>
         </div>
     )

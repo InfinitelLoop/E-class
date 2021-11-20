@@ -5,6 +5,7 @@ import Button from "../../ui/button/Button";
 import classes from "./CreateClass.module.css";
 import axios from "axios";
 import actionType from "../../../store/actionType";
+import ClassCard from "../../classCard/ClassCard";
 
 
 const CreateClass = (props) => {
@@ -17,6 +18,8 @@ const CreateClass = (props) => {
   const [subject, setSubject] = useState(initialState);
   const [section, setSection] = useState(initialState);
   const [roomNo, setRoomNo] = useState(initialState);
+
+
   const username = useSelector(state => state.auth.username);
   const dispatch = useDispatch();
 
@@ -99,28 +102,76 @@ const CreateClass = (props) => {
   }
 
   function createClass() {
-    let obj = {
-      classname: className.value,
-      section: section.value,
-      subject: subject.value,
-      room_no: roomNo.value,
-      username: username
+
+    if(validateForm()){
+      let obj = {
+        classname: className.value,
+        section: section.value,
+        subject: subject.value,
+        room_no: roomNo.value,
+        username: username
+      }
+  
+      axios.post('http://localhost:3001/classes/create', obj)
+        .then((res) => {
+          if (res.data.status === 'SUCCESS') {
+            props.fetchClasses();
+            close();
+            dispatch({
+              type: actionType.SHOW_SUCCESS_TOASTER,
+              payload: "Class created"
+            })
+          } else {
+            dispatch({
+              type: actionType.SHOW_ERROR_TOASTER,
+              payload: "Something went wrong! Try again later."
+            })
+          }
+        })
+        .catch(err => dispatch({
+          type: actionType.SHOW_ERROR_TOASTER,
+          payload: "Something went wrong! Try again later."
+        }))
+    } else {
+      dispatch({
+        type: actionType.SHOW_ERROR_TOASTER,
+        payload: "Please fill out the values correctly."
+      })
     }
 
-    axios.post('http://localhost:3001/classes/create', obj)
-      .then((res) => {
-        if (res.data.status === 'SUCCESS') {
-          setClassName(initialState);
-          setRoomNo(initialState);
-          setSection(initialState);
-          setSubject(initialState);
-          props.closeModal();
-          dispatch({
-             type: actionType.SHOW_SUCCESS_TOASTER,
-             payload: "Class created"
-            })
-        }
-      })
+  }
+
+  function validateForm(){
+    let isValid  = true;
+    if(className.value.trim()===''){
+      let updatedState = {...className};
+      updatedState.valid = false;
+      updatedState.touched = true;
+      setClassName(updatedState);
+      isValid = false;
+    }
+    if(subject.value.trim()===''){
+      let updatedState = {...subject};
+      updatedState.valid = false;
+      updatedState.touched = true;
+      setSubject(updatedState);
+      isValid = false;
+    }
+    if(section.value.trim()===''){
+      let updatedState = {...section};
+      updatedState.valid = false;
+      updatedState.touched = true;
+      setSection(updatedState);
+      isValid = false;
+    }
+    if(roomNo.value.trim()===''){
+      let updatedState = {...roomNo};
+      updatedState.valid = false;
+      updatedState.touched = true;
+      setRoomNo(updatedState);
+      isValid = false;
+    }
+    return isValid;
   }
 
   return (

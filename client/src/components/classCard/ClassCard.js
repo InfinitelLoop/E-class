@@ -1,29 +1,28 @@
-import React from'react';
+import React from 'react';
 
 import classes from './ClassCard.module.css';
+import StudentBackground from '../../assets/images/StudentBackground.svg';
+import TeacherBackground from '../../assets/images/TeacherBackground.svg';
+import Icon from '../../assets/images/cancel.svg';
 
-function ClassCard(props){
-    let attachedClass = [classes.ClassCard];
-    if(props.type==='Teacher'){
-        attachedClass.push(classes.TeacherCard);
-    } else {
-        attachedClass.push(classes.StudentCard);
-    }
+function ClassCard(props) {
 
-    return(
-        <div className={attachedClass.join(' ')}>
-            {/* <div>
-
+    return (
+        <div className={classes.ClassCard} onClick={props.clicked}>
+            <div style={{ 
+                backgroundImage: `url(${props.type === 'Teacher' ? TeacherBackground : StudentBackground})`,
+            }} className={classes.Header}>
+                <label style={{fontSize: "40px", fontWeight: 600}}>{props.name}</label>
+                <label style={{fontSize: "24px", fontWeight: 400}}>{props.subject}</label>
+                <label style={{fontSize: "24px", fontWeight: 400}}>{props.section}</label>
             </div>
-            <div>
-
-            </div> */}
-            <h3>{props.name}</h3>
-            <p>{props.subject}</p>
-            <p>{props.section}</p>
-            <p>{props.roomNo}</p> 
+            <div className={classes.Footer}>
+                <p>Room-No: {props.roomNo}</p>
+                <label style={{display: "flex"}}> 
+                <img style={{width: 30}} src={Icon} alt=''/></label>
+            </div>
         </div>
     )
-}
+}                    
 
 export default ClassCard;

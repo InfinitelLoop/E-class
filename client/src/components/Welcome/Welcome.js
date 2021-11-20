@@ -4,14 +4,15 @@ import SignIn from '../signIn/SignIn';
 import SignUp from '../signUp/SignUp';
 import classes from './Welcome.module.css';
 import Button from '../ui/button/Button';
-import ErrorBar from '../ui/toaster/ErrorBar';
 import Logo from '../../assets/images/logo1.svg';
+import OtpModal from '../modals/otpModal/OtpModal';
 
 const Welcome = (props) => {
 
 
     const [openSignInModal, setOpenSignInModal] = useState(false);
     const [openSignUpModal, setOpenSignUpModal] = useState(false);
+    const [openOtpModal, setOpenOtpModal] = useState(false);
 
     function signIn() {
         setOpenSignInModal(true);

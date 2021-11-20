@@ -52,6 +52,9 @@ const JoinClass = (props) => {
                     type: actionType.SHOW_SUCCESS_TOASTER,
                     payload: "Enrolled Successfully!"
                 })
+                props.fetchClasses();
+                close();
+
             } else if(res.data.status==='Already enrolled to this Class'){
                 dispatch({
                     type: actionType.SHOW_INFO_TOASTER,
@@ -88,7 +91,6 @@ const JoinClass = (props) => {
         <div className={classes.JoinClass} onClick={(event) => event.stopPropagation()}>
             <h2 style={{ marginTop: 30 }}>Join a Class</h2>
             <div className={classes.InputContainer}>
-                {/* <label className={classes.Label}>Class Code</label> */}
                 <p style={{ fontSize: 16, fontWeight: 'normal' }} className={classes.Label}>Ask your teacher for the class code, then enter it here.</p>
 
                 <Input

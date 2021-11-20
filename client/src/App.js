@@ -61,7 +61,7 @@ function App() {
               <Route
                 path="/"
                 element={
-                  <Home />
+                  <Classes />
                 }
               />
             </Routes>
