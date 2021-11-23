@@ -97,9 +97,9 @@ const Classes = (props) => {
       });
   }
 
-  function viewClass(obj, type){
+  function viewClass(obj, type, schedule) {
     setShowClassView(true);
-    setselectedClass(<ClassView close={() => setShowClassView(false)} classObj={obj} type = {type}/>);
+    setselectedClass(<ClassView close={() => setShowClassView(false)} classObj={obj} type={type} scheduleMode={schedule} />);
   }
 
   function openCreateModal() {
@@ -152,7 +152,8 @@ const Classes = (props) => {
         <React.Fragment>
           {myClassCards.map((item) => (
             <ClassCard
-              clicked={() => viewClass(item, 'Teacher')}
+              clicked={() => viewClass(item, 'Teacher', false)}
+              scheduleClicked={() => viewClass(item, 'Teacher', true)}
               type="Teacher"
               name={item.classname}
               subject={item.subject}
@@ -162,7 +163,8 @@ const Classes = (props) => {
           ))}
           {enrolledClassCards.map((item) => (
             <ClassCard
-              clicked={() => viewClass(item, 'Student')}
+              clicked={() => viewClass(item, 'Student', false)}
+              scheduleClicked={() => viewClass(item, 'Student', true)}
               type="Student"
               name={item.classname}
               subject={item.subject}

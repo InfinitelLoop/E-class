@@ -7,8 +7,8 @@ import BackIcon from "../../assets/images/back.svg";
 import MyCalendar from "../myCalendar/MyCalendar";
 
 const ClassView = (props) => {
-  const [showDashboard, setshowDashboard] = useState(true);
-  const [showScheduler, setshowScheduler] = useState(false);
+  const [showDashboard, setshowDashboard] = useState(props.scheduleMode ? false : true);
+  const [showScheduler, setshowScheduler] = useState(props.scheduleMode ? true : false);
   const [showPeople, setshowPeople] = useState(false);
 
   function viewDashboard() {
@@ -61,7 +61,7 @@ const ClassView = (props) => {
         {showDashboard ? (
           <ClassDashboard
             classObj={props.classObj}
-            type={props.type} 
+            type={props.type}
           />
         ) : null}
         {showScheduler ? <MyCalendar classCode={props.classObj.classCode} type={props.type} /> : null}
