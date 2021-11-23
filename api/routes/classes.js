@@ -117,15 +117,15 @@ router.post('/join', function (req, res, next) {
                                     .then(dbRes2 => {
 
                                         let studentsList = classObj.students || [];
-                                        studentsList.push({name: userObj.name, email: userObj.email});
+                                        studentsList.push({ name: userObj.name, email: userObj.email });
 
                                         axios.put(`/classes/${classKey}/students.json`, studentsList)
-                                        .then(dbRes3 => {
-                                            res.send({
-                                                status: "SUCCESS"
+                                            .then(dbRes3 => {
+                                                res.send({
+                                                    status: "SUCCESS"
+                                                })
                                             })
-                                        })
-                                        .catch(err => console.log(err))
+                                            .catch(err => console.log(err))
                                     })
                                     .catch(err => console.log(err))
                             } else {
@@ -185,5 +185,70 @@ router.post('/', function (req, res, next) {
             status: "ERROR"
         }))
 })
+
+// Class post Messages
+
+router.post('/post-msg', function (req, res, next) {
+
+    axios.get('/classes.json')
+        .then(dbRes => {
+
+            // Fetching class list from firebase
+
+            let classKey = 0;
+            let classObj = {};
+            let classList = dbRes.data;
+
+            // checking class object with passed class code from frontend
+            for (let key in classList) {
+                if (req.body.classCode.trim() === classList[key].classCode) {
+                    classObj = classList[key];
+                    classKey = key;
+                    break;
+                }
+            }
+
+            let obj = {
+                msg: req.body.msg,
+                username: req.body.username
+            }
+            let discussionList = classObj.discussion || [];
+            discussionList.push(obj);
+            axios.put(`/classes/${classKey}/discussion.json`, discussionList)
+                .then(dbRes => {
+                    res.send({
+                        status: "SUCCESS",
+                    })
+                })
+                .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+})
+
+
+// for fetching discussion
+router.post('/discussions', function (req, res, next) {
+
+    // Fetching class list from firebase
+    axios.get('/classes.json')
+        .then(dbRes => {
+
+            let classObj = {};
+
+            // checking class object with passed class code from frontend
+            for (let key in dbRes.data) {
+                if (req.body.classCode.trim() === dbRes.data[key].classCode) {
+                    classObj = dbRes.data[key];
+                    break;
+                }
+            }            
+            res.send({
+                status: "SUCCESS",
+                discussion: classObj.discussion || []
+            })
+        })
+        .catch(err => console.log(err))
+})
+
 
 module.exports = router;

@@ -17,6 +17,7 @@ const Classes = (props) => {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [showJoinClassModal, setShowJoinClassModal] = useState(false);
   const [showClassView, setShowClassView] = useState(false);
+  const [selectedClass, setselectedClass] = useState(null);
 
   const loading = useSelector((state) => state.class.loading);
   const enrolledClassCards = useSelector((state) => state.class.enrolledClasses);
@@ -96,6 +97,11 @@ const Classes = (props) => {
       });
   }
 
+  function viewClass(obj, type){
+    setShowClassView(true);
+    setselectedClass(<ClassView close={() => setShowClassView(false)} classObj={obj} type = {type}/>);
+  }
+
   function openCreateModal() {
     setShowCreateClassModal(true);
   }
@@ -141,12 +147,12 @@ const Classes = (props) => {
           </div>
         </div>
       ) : showClassView ? (
-        <ClassView close={() => setShowClassView(false)} />
+        selectedClass
       ) : (
         <React.Fragment>
           {myClassCards.map((item) => (
             <ClassCard
-              clicked={() => setShowClassView(true)}
+              clicked={() => viewClass(item, 'Teacher')}
               type="Teacher"
               name={item.classname}
               subject={item.subject}
@@ -156,7 +162,7 @@ const Classes = (props) => {
           ))}
           {enrolledClassCards.map((item) => (
             <ClassCard
-              clicked={() => setShowClassView(true)}
+              clicked={() => viewClass(item, 'Student')}
               type="Student"
               name={item.classname}
               subject={item.subject}

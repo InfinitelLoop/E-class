@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 import Button from "../ui/button/Button";
@@ -26,12 +26,24 @@ const SignUp = (props) => {
   const [generatedOtp, setgeneratedOtp] = useState("");
   const [loading, setloading] = useState(false);
 
+  const inputRef = useRef(null);
+  const otpRef = useRef(null);
+
   const dispatch = useDispatch();
 
   let attachedClass = [classes.SignUpModal];
   if (props.visible) {
     attachedClass.push(classes.Visible);
   }
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [props.visible])
+
+  useEffect(() => {
+    if(otpRef.current)
+    otpRef.current.focus();
+  }, [showOTPModal])
 
   function generateOtp() {
     if (validateForm()) {
@@ -71,6 +83,7 @@ const SignUp = (props) => {
             });
             setShowOTPModal(false);
             props.signInInstead();
+            setOtp(initialState);
             setName(initialState);
             setUsername(initialState);
             setPassword(initialState);
@@ -242,6 +255,8 @@ const SignUp = (props) => {
             </h2>
             <div className={classes.InputContainer}>
               <Input
+                ref={otpRef}
+                ref={inputRef}
                 value={otp.value}
                 type="text"
                 placeholder="OTP"
@@ -252,7 +267,7 @@ const SignUp = (props) => {
               />
               {!otp.valid && otp.touched ? <label className={classes.ErrorLabel}>Required!</label> : null}
             </div>
-            <div style={{display:'flex'}}>
+            <div style={{ display: 'flex' }}>
               <Button type='Secondary' clicked={() => setShowOTPModal(false)} marginBottom='30px' width="100px">
                 Cancel
               </Button>
@@ -268,6 +283,7 @@ const SignUp = (props) => {
           <div className={classes.InputContainer}>
             <label className={classes.Label}>Full name</label>
             <Input
+              ref={inputRef}
               value={name.value}
               type="text"
               placeholder=""

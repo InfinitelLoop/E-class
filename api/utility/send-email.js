@@ -16,7 +16,9 @@ function configureMailOptionsForSignup(to, otp) {
         from: 'e.class.app2021@gmail.com',
         to: to,
         subject: 'Welcome to E-class!',
-        text: `E-Class welcomes you! Get ready to learn. 
+        text: `
+        Hi,
+        E-Class welcomes you! Get ready to learn. 
         Just one more step. Enter this OTP ${otp} and verify yourself and you're good to go.
             
         Regards.
@@ -25,19 +27,16 @@ function configureMailOptionsForSignup(to, otp) {
     };
 }
 
-function configureMailOptionsForScheduler(to, user, classname, time) {
+function configureMailOptionsForScheduler(to, body, subject) {
     return {
         from: 'e.class.app2021@gmail.com',
         to: to,
-        subject: 'New Class Scheduled!',
-        text: `Hi ${user}.
-        A new lecture has been scheduled for ${classname} at ${time}.
-        
-        Regards.
-        Team E-Class`
+        subject: subject,
+        text: body
 
     };
 }
+
 
 async function mailEvent(mailOptions, transporter, payload) {
     let info = await transporter.sendMail(mailOptions);
@@ -46,11 +45,18 @@ async function mailEvent(mailOptions, transporter, payload) {
         otp: payload.otp
     })
 }
+async function scheduleMail(mailOptions, transporter, payload) {
+    let info = await transporter.sendMail(mailOptions);
+    payload.res.send({
+        status: "SUCCESS",
+    })
+}
 
 module.exports = {
     getTransporter,
     configureMailOptionsForScheduler,
     configureMailOptionsForSignup,
-    mailEvent
+    mailEvent,
+    scheduleMail
 }
 

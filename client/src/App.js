@@ -2,11 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from 'react';
 import { useSelector } from "react-redux";
 import Classes from "./components/classes/Classes";
-import Settings from "./components/settings/Settings";
-import MySubjects from "./components/mySubjects/MySubjects";
-import Scheduler from "./components/scheduler/Scheduler";
 import Sidebar from "./components/sidebar/Sidebar";
-import Home from "./components/home/Home";
 import Welcome from "./components/Welcome/Welcome";
 import ErrorBar from "./components/ui/toaster/ErrorBar";
 import SuccessBar from "./components/ui/toaster/SuccessBar";
@@ -35,27 +31,6 @@ function App() {
                 exact
                 element={
                   <Classes />
-                }
-              />
-              <Route
-                path="/my-subjects"
-                exact
-                element={
-                  <MySubjects />
-                }
-              />
-              <Route
-                path="/settings"
-                exact
-                element={
-                  <Settings />
-                }
-              />
-              <Route
-                path="/scheduler"
-                exact
-                element={
-                  <Scheduler />
                 }
               />
               <Route

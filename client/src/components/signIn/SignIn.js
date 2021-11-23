@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { decryptPassword } from '../../utility/common';
@@ -17,12 +17,19 @@ const SignIn = (props) => {
     const [username, setUsername] = useState(initialState);
     const [password, setPassword] = useState(initialState);
 
+    const inputRef = useRef(null);
+
     const dispatch = useDispatch();
 
     let attachedClass = [classes.SignInModal];
     if (props.visible) {
         attachedClass.push(classes.Visible);
     }
+
+    useEffect(() => {
+        inputRef.current.focus();
+    }, [props.visible])
+
 
     const usernameChangedHandler = event => {
         validateInput(event.target.value, 'username');
@@ -51,7 +58,7 @@ const SignIn = (props) => {
                     let usernameFound = false;
                     let passwordCorrect = false;
                     for (let index in usersList) {
-                        if (username.value === usersList[index].username) {
+                        if (username.value.trim() === usersList[index].username.trim()) {
                             usernameFound = true;
                             if (password.value === decryptPassword(usersList[index].password)) {
                                 passwordCorrect = true;
@@ -124,12 +131,12 @@ const SignIn = (props) => {
             <h2 style={{ marginTop: 30 }}>Sign in to your account</h2>
             <div className={classes.InputContainer}>
                 <label className={classes.Label}>Username</label>
-                <Input type="text" value={username.value} placeholder='' changed={usernameChangedHandler} width="300px" touched={username.touched} valid={username.isValid} />
+                <Input ref={inputRef} type="text" value={username.value} placeholder='' changed={usernameChangedHandler} width="300px" touched={username.touched} valid={username.isValid} />
                 {!username.isValid && username.touched ? <label className={classes.ErrorLabel}>This is a required field.</label> : null}
             </div>
             <div className={classes.InputContainer}>
                 <label className={classes.Label}>Password</label>
-                <Input type="password" value={password.value} placeholder='' changed={passwordChangedHandler} width="300px" touched={password.touched} valid={password.isValid} />
+                <Input type="password" value={password.value} placeholder='' changed={passwordChangedHandler} width="300px" touched={password.touched} valid={password.isValid} enterEvent={signIn}/>
                 {!password.isValid && password.touched ? <label className={classes.ErrorLabel}>This is a required field.</label> : null}
             </div>
 

@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import classes from './Sidebar.module.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -106,7 +105,7 @@ function Sidebar(props) {
                 <label style={{ fontSize: '48px', fontWeight: 400, marginLeft: 24, whiteSpace: 'nowrap' }}>E-Class</label>
             </label>
 
-            <ul className={classes.ul}>
+            {/* <ul className={classes.ul}>
                 <NavLink to="/classes"
                     className={classes.Inactive}
                 // activeClassName={classes.ActiveClass}
@@ -126,7 +125,7 @@ function Sidebar(props) {
                 >
                     <li className={classes.li}>Scheduler</li>
                 </NavLink>
-            </ul>
+            </ul> */}
 
             <div className={classes.ProfileContainer}>
                 <div className={classes.AddIcon}><img src={AddIcon} alt='add' onClick={() => setShowAddOptions(!showAddOptions)} /></div>

@@ -12,13 +12,13 @@ function ClassCard(props) {
             <div style={{ 
                 backgroundImage: `url(${props.type === 'Teacher' ? TeacherBackground : StudentBackground})`,
             }} className={classes.Header}>
-                <label style={{fontSize: "40px", fontWeight: 600}}>{props.name}</label>
-                <label style={{fontSize: "24px", fontWeight: 400}}>{props.subject}</label>
-                <label style={{fontSize: "24px", fontWeight: 400}}>{props.section}</label>
+                <label style={{fontSize: "40px", cursor: 'pointer', fontWeight: 600}}>{props.name}</label>
+                <label style={{fontSize: "24px", cursor: 'pointer', fontWeight: 400}}>{props.subject}</label>
+                <label style={{fontSize: "24px", cursor: 'pointer', fontWeight: 400}}>{props.section}</label>
             </div>
             <div className={classes.Footer}>
                 <p>Room-No: {props.roomNo}</p>
-                <label style={{display: "flex"}}> 
+                <label style={{display: "flex", cursor: 'pointer'}}> 
                 <img style={{width: 30}} src={Icon} alt=''/></label>
             </div>
         </div>
