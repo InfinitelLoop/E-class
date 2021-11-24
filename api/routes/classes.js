@@ -32,7 +32,8 @@ router.post('/create', function (req, res, next) {
                 subject: req.body.subject,
                 room_no: req.body.room_no,
                 classCode: code,
-                teacher: userObj.name
+                teacher: userObj.name,
+                availableSeats: 25
             }
 
             // create class
@@ -117,7 +118,7 @@ router.post('/join', function (req, res, next) {
                                     .then(dbRes2 => {
 
                                         let studentsList = classObj.students || [];
-                                        studentsList.push({ name: userObj.name, email: userObj.email });
+                                        studentsList.push({ name: userObj.name, email: userObj.email, username: userObj.username });
 
                                         axios.put(`/classes/${classKey}/students.json`, studentsList)
                                             .then(dbRes3 => {
@@ -249,6 +250,9 @@ router.post('/discussions', function (req, res, next) {
         })
         .catch(err => console.log(err))
 })
+
+
+
 
 
 module.exports = router;

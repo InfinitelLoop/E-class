@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
-import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
+import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
 import {
     Scheduler,
     DayView,
@@ -20,21 +20,24 @@ import {
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import actionType from '../../store/actionType';
+import Spinner from '../ui/spinner/Spinner';
 
 // import { appointments } from './appointments';
 
 function MyCalendar(props) {
 
     const [data, setdata] = useState([]);
+    const [loading, setloading] = useState(true);
     const dispatch = useDispatch();
 
     useEffect(() => {
-
+        setloading(true);
         let obj = {
             classCode: props.classCode
         }
         axios.post("http://localhost:3001/schedule/my-schedules", obj)
             .then(res => {
+                setloading(false);
                 if (res.data.status === "SUCCESS") {
                     setdata(res.data.schedules);
                 } else {
@@ -44,22 +47,26 @@ function MyCalendar(props) {
                     });
                 }
             })
-            .catch(err => dispatch({
-                type: actionType.SHOW_ERROR_TOASTER,
-                payload: "Something went wrong! Try again later.",
-            }))
+            .catch(err => {
+                setloading(false);
+                dispatch({
+                    type: actionType.SHOW_ERROR_TOASTER,
+                    payload: "Something went wrong! Try again later.",
+                })
+            })
     }, [])
 
     function commitChanges({ added, changed, deleted }) {
-
+        setloading(true);
         if (added) {
             let obj = {
                 classCode: props.classCode,
                 action: 'ADD',
-                schedule: added
+                schedule: { ...added }
             }
             axios.post('http://localhost:3001/schedule/update-schedules', obj)
                 .then(res => {
+                    setloading(false);
                     if (res.data.status === 'SUCCESS') {
                         setdata(res.data.schedules);
                         dispatch({
@@ -73,10 +80,13 @@ function MyCalendar(props) {
                         })
                     }
                 })
-                .catch(err => dispatch({
-                    type: actionType.SHOW_ERROR_TOASTER,
-                    payload: "Something went wrong! Try again later.",
-                }))
+                .catch(err => {
+                    setloading(false);
+                    dispatch({
+                        type: actionType.SHOW_ERROR_TOASTER,
+                        payload: "Something went wrong! Try again later.",
+                    })
+                })
             console.log('added : ', added);
         }
 
@@ -88,6 +98,7 @@ function MyCalendar(props) {
             }
             axios.post('http://localhost:3001/schedule/update-schedules', obj)
                 .then(res => {
+                    setloading(false);
                     if (res.data.status === 'SUCCESS') {
                         setdata(res.data.schedules);
                         dispatch({
@@ -101,10 +112,13 @@ function MyCalendar(props) {
                         })
                     }
                 })
-                .catch(err => dispatch({
-                    type: actionType.SHOW_ERROR_TOASTER,
-                    payload: "Something went wrong! Try again later.",
-                }))
+                .catch(err => {
+                    setloading(false);
+                    dispatch({
+                        type: actionType.SHOW_ERROR_TOASTER,
+                        payload: "Something went wrong! Try again later.",
+                    })
+                })
             console.log('changed : ', changed);
         }
 
@@ -116,6 +130,7 @@ function MyCalendar(props) {
             }
             axios.post('http://localhost:3001/schedule/update-schedules', obj)
                 .then(res => {
+                    setloading(false);
                     if (res.data.status === 'SUCCESS') {
                         setdata(res.data.schedules);
                         dispatch({
@@ -129,10 +144,13 @@ function MyCalendar(props) {
                         })
                     }
                 })
-                .catch(err => dispatch({
-                    type: actionType.SHOW_ERROR_TOASTER,
-                    payload: "Something went wrong! Try again later.",
-                }))
+                .catch(err => {
+                    setloading(false);
+                    dispatch({
+                        type: actionType.SHOW_ERROR_TOASTER,
+                        payload: "Something went wrong! Try again later.",
+                    })
+                })
             console.log('deleted : ', deleted);
         }
     }
@@ -143,58 +161,56 @@ function MyCalendar(props) {
         allowResizing: false,
         allowDragging: false,
         allowUpdating: false,
-      }
+    }
 
     let flag = props.type === 'Teacher' ? true : false;
 
 
     return (
-        <Paper>
-            <Scheduler
-                data={data}
-                // editing={permissions}
-            >
-                <ViewState
-                    defaultCurrentDate={new Date()}
-                    defaultCurrentViewName="Week"
-                />
-                {/* <Editing
-                    allowUpdating={false} /> */}
-                <EditingState
-                    onCommitChanges={commitChanges}
-                    allowUpdating={false}
-                />
-                {/* <IntegratedEditing /> */}
-                <DayView
-                    startDayHour={0}
-                    endDayHour={24}
-                />
-                <WeekView
-                    startDayHour={0}
-                    endDayHour={24}
-                />
-                <WeekView
-                    name="work-week"
-                    displayName="Work Week"
-                    excludedDays={[0, 6]}
-                    startDayHour={0}
-                    endDayHour={24}
-                />
-                <MonthView />
-                <EditRecurrenceMenu />
-                <Toolbar />
-                <ViewSwitcher />
-                <DateNavigator />
-                <ConfirmationDialog />
-                <Appointments />
-                <AllDayPanel />
-                <AppointmentTooltip
-                    showOpenButton ={flag}
-                    showDeleteButton = {flag}
-                />
-                { flag ? <AppointmentForm /> : null}
-            </Scheduler>
-        </Paper>
+        <React.Fragment>
+            {loading ? <Spinner /> : <Paper>
+                <Scheduler
+                    data={data}
+                >
+                    <ViewState
+                        defaultCurrentDate={new Date()}
+                        defaultCurrentViewName="Week"
+                    />
+                    <EditingState
+                        onCommitChanges={commitChanges}
+                        allowUpdating={false}
+                    />
+                    <DayView
+                        startDayHour={0}
+                        endDayHour={24}
+                    />
+                    <WeekView
+                        startDayHour={0}
+                        endDayHour={24}
+                    />
+                    <WeekView
+                        name="work-week"
+                        displayName="Work Week"
+                        excludedDays={[0, 6]}
+                        startDayHour={0}
+                        endDayHour={24}
+                    />
+                    <MonthView />
+                    <EditRecurrenceMenu />
+                    <Toolbar />
+                    <ViewSwitcher />
+                    <DateNavigator />
+                    <ConfirmationDialog />
+                    <Appointments />
+                    <AllDayPanel />
+                    <AppointmentTooltip
+                        showOpenButton={flag}
+                        showDeleteButton={flag}
+                    />
+                    {flag ? <AppointmentForm /> : null}
+                </Scheduler>
+            </Paper>}
+        </React.Fragment>
     );
 }
 

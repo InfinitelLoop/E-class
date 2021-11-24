@@ -39,14 +39,14 @@ const Input = React.forwardRef((props, ref) => {
         style['marginLeft'] = props.marginLeft;
     }
 
-    let myInput = <input ref={ref} onKeyDown={e => performEnterEvent(e)} value={props.value} type="text" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />;
+    let myInput = <input ref={ref} disabled={props.disabled} onKeyDown={e => performEnterEvent(e)} value={props.value} type="text" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />;
 
     switch (props.type) {
-        case 'text': myInput = <input ref={ref} onKeyDown={e => performEnterEvent(e)} value={props.value} type="text" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
-        case "password": myInput = <input ref={ref} onKeyDown={e => performEnterEvent(e)} value={props.value} type="password" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
-        case 'email': myInput = <input ref={ref} onKeyDown={e => performEnterEvent(e)} value={props.value} type="email" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
-        case 'date': myInput = <input ref={ref} onKeyDown={e => performEnterEvent(e)} value={props.value} type="date" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
-        case 'datetime-local': myInput = <input ref={ref} onKeyDown={e => performEnterEvent(e)} value={props.value} type="datetime-local" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
+        case 'text': myInput = <input ref={ref} disabled={props.disabled} onKeyDown={e => performEnterEvent(e)} value={props.value} type="text" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
+        case "password": myInput = <input ref={ref} disabled={props.disabled} onKeyDown={e => performEnterEvent(e)} value={props.value} type="password" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
+        case 'email': myInput = <input ref={ref} disabled={props.disabled} onKeyDown={e => performEnterEvent(e)} value={props.value} type="email" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
+        case 'date': myInput = <input ref={ref} disabled={props.disabled} onKeyDown={e => performEnterEvent(e)} value={props.value} type="date" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
+        case 'datetime-local': myInput = <input ref={ref} disabled={props.disabled} onKeyDown={e => performEnterEvent(e)} value={props.value} type="datetime-local" placeholder={props.placeholder} style={style} className={attachedClasses.join(' ')} onChange={props.changed} />; break;
         
         case 'textarea': myInput = <textarea value={props.value} rows={props.rows} cols={props.columns} placeholder={props.placeholder} style={style} className={attachedTextareaClasses.join(' ')} onChange={props.changed} > </textarea>; break;
 

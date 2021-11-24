@@ -2,31 +2,43 @@ import React, { useState } from "react";
 import ClassDashboard from "../classdashboard/ClassDashboard";
 import classes from "./ClassView.module.css";
 import People from "../people/People";
-import MyScheduler from "../myScheduler/MyScheduler";
 import BackIcon from "../../assets/images/back.svg";
 import MyCalendar from "../myCalendar/MyCalendar";
+import RegistrationForm from '../registrationForm/RegistrationForm';
+import Requests from "../requests/Requests";
 
 const ClassView = (props) => {
   const [showDashboard, setshowDashboard] = useState(props.scheduleMode ? false : true);
   const [showScheduler, setshowScheduler] = useState(props.scheduleMode ? true : false);
   const [showPeople, setshowPeople] = useState(false);
+  const [showRegister, setshowRegister] = useState(false);
 
   function viewDashboard() {
     setshowDashboard(true);
     setshowScheduler(false);
     setshowPeople(false);
+    setshowRegister(false);
   }
 
   function viewScheduler() {
     setshowDashboard(false);
     setshowScheduler(true);
     setshowPeople(false);
+    setshowRegister(false);
   }
 
   function viewPeople() {
     setshowDashboard(false);
     setshowScheduler(false);
     setshowPeople(true);
+    setshowRegister(false);
+  }
+
+  function viewRegister() {
+    setshowDashboard(false);
+    setshowScheduler(false);
+    setshowPeople(false);
+    setshowRegister(true);
   }
 
   return (
@@ -56,6 +68,13 @@ const ClassView = (props) => {
         >
           People
         </label>
+        <label
+          className={classes.SideLink}
+          style={showRegister ? { backgroundColor: "#185473", color: 'white', boxShadow: "0px 8px 15px rgba(0,0,0,0.2)" } : {}}
+          onClick={viewRegister}
+        >
+          {props.type === 'Student' ? <label>Registration</label> : <label>Requests</label>}
+        </label>
       </div>
       <div className={classes.MainView}>
         {showDashboard ? (
@@ -66,15 +85,8 @@ const ClassView = (props) => {
         ) : null}
         {showScheduler ? <MyCalendar classCode={props.classObj.classCode} type={props.type} /> : null}
         {showPeople ? <People teacher={props.classObj.teacher} students={props.classObj.students} /> : null}
+        {showRegister ? props.type === 'Student' ? <RegistrationForm classCode={props.classObj.classCode} /> : <Requests classCode={props.classObj.classCode} /> : null}
       </div>
-      {/* <p>{props.classObj.teacher}</p>
-      
-            <p>
-            <ul>Students:
-                {props.classObj.students ? props.classObj.students.map(student => {
-                    return <li>{student.name}, {student.email}</li>
-                }) : <li>no list</li> }
-            </ul> */}
     </div>
   );
 };

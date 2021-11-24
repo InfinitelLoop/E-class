@@ -37,6 +37,17 @@ function configureMailOptionsForScheduler(to, body, subject) {
     };
 }
 
+function configureMailOptionsForOfflineLectures(to, body, subject) {
+    return {
+        from: 'e.class.app2021@gmail.com',
+        to: to,
+        subject: subject,
+        text: body
+
+    };
+}
+
+
 
 async function mailEvent(mailOptions, transporter, payload) {
     let info = await transporter.sendMail(mailOptions);
@@ -52,11 +63,20 @@ async function scheduleMail(mailOptions, transporter, payload) {
     })
 }
 
+async function requestEvent(mailOptions, transporter, payload) {
+    let info = await transporter.sendMail(mailOptions);
+    payload.res.send({
+        status: "SUCCESS",
+    })
+}
+
 module.exports = {
     getTransporter,
     configureMailOptionsForScheduler,
     configureMailOptionsForSignup,
     mailEvent,
-    scheduleMail
+    scheduleMail,
+    configureMailOptionsForOfflineLectures,
+    requestEvent
 }
 

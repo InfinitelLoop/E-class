@@ -41,8 +41,8 @@ const SignUp = (props) => {
   }, [props.visible])
 
   useEffect(() => {
-    if(otpRef.current)
-    otpRef.current.focus();
+    if (otpRef.current)
+      otpRef.current.focus();
   }, [showOTPModal])
 
   function generateOtp() {
@@ -51,15 +51,24 @@ const SignUp = (props) => {
       axios
         .post("http://localhost:3001/users/get-otp", { email: email.value })
         .then((res) => {
+          setloading(false);
           if (res.data.status === "SUCCESS") {
             setgeneratedOtp(res.data.otp);
-            setloading(false);
             setShowOTPModal(true);
           } else {
-            console.log("invalid email");
+            dispatch({
+              type: actionType.SHOW_ERROR_TOASTER,
+              payload: "Something went wrong! Try again later.",
+            })
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setloading(false);
+          dispatch({
+            type: actionType.SHOW_ERROR_TOASTER,
+            payload: "Something went wrong! Try again later.",
+          })
+        });
     }
   }
 
@@ -245,10 +254,8 @@ const SignUp = (props) => {
 
   return (
     <div className={attachedClass.join(" ")}>
-      {showOTPModal ? (
-        loading ? (
-          <Spinner />
-        ) : (
+      {
+        loading ? <Spinner /> : showOTPModal ?
           <React.Fragment>
             <h2 style={{ marginTop: 30, fontSize: "25px", textAlign: "center" }}>
               OTP has been sent to your registered email. Check your inbox.
@@ -276,78 +283,77 @@ const SignUp = (props) => {
               </Button>
             </div>
           </React.Fragment>
-        )
-      ) : (
-        <React.Fragment>
-          <h2 style={{ marginTop: 30 }}>Create new account</h2>
-          <div className={classes.InputContainer}>
-            <label className={classes.Label}>Full name</label>
-            <Input
-              ref={inputRef}
-              value={name.value}
-              type="text"
-              placeholder=""
-              width="300px"
-              touched={name.touched}
-              valid={name.valid}
-              changed={nameChangedHandler}
-            />
-            {!name.valid && name.touched ? <label className={classes.ErrorLabel}>Enter a Name </label> : null}
-          </div>
-          <div className={classes.InputContainer}>
-            <label className={classes.Label}>Username</label>
-            <Input
-              value={username.value}
-              type="text"
-              placeholder=""
-              width="300px"
-              touched={username.touched}
-              valid={username.valid}
-              changed={usernameChangedHandler}
-            />
-            {!username.valid && username.touched ? (
-              <label className={classes.ErrorLabel}>Enter a Username </label>
-            ) : null}
-          </div>
-          <div className={classes.InputContainer}>
-            <label className={classes.Label}>Password</label>
-            <Input
-              value={password.value}
-              type="password"
-              placeholder=""
-              width="300px"
-              touched={password.touched}
-              valid={password.valid}
-              changed={passwordChangedHandler}
-            />
-            {!password.valid && password.touched ? (
-              <label className={classes.ErrorLabel}>Enter a Password </label>
-            ) : null}
-          </div>
-          <div className={classes.InputContainer}>
-            <label className={classes.Label}>E-mail</label>
-            <Input
-              value={email.value}
-              type="email"
-              placeholder=""
-              width="300px"
-              touched={email.touched}
-              valid={email.valid}
-              changed={emailChangedHandler}
-            />
-            {!email.valid && email.touched ? <label className={classes.ErrorLabel}>Enter an Email </label> : null}
-          </div>
-          <Button clicked={generateOtp} width="200px">
-            Sign Up
-          </Button>
-          <p style={{ marginBottom: 30 }}>
-            Already a user?{" "}
-            <label className={classes.SignIn} onClick={props.signInInstead}>
-              Sign In
-            </label>
-          </p>
-        </React.Fragment>
-      )}
+          :
+          <React.Fragment>
+            <h2 style={{ marginTop: 30 }}>Create new account</h2>
+            <div className={classes.InputContainer}>
+              <label className={classes.Label}>Full name</label>
+              <Input
+                ref={inputRef}
+                value={name.value}
+                type="text"
+                placeholder=""
+                width="300px"
+                touched={name.touched}
+                valid={name.valid}
+                changed={nameChangedHandler}
+              />
+              {!name.valid && name.touched ? <label className={classes.ErrorLabel}>Enter a Name </label> : null}
+            </div>
+            <div className={classes.InputContainer}>
+              <label className={classes.Label}>Username</label>
+              <Input
+                value={username.value}
+                type="text"
+                placeholder=""
+                width="300px"
+                touched={username.touched}
+                valid={username.valid}
+                changed={usernameChangedHandler}
+              />
+              {!username.valid && username.touched ? (
+                <label className={classes.ErrorLabel}>Enter a Username </label>
+              ) : null}
+            </div>
+            <div className={classes.InputContainer}>
+              <label className={classes.Label}>Password</label>
+              <Input
+                value={password.value}
+                type="password"
+                placeholder=""
+                width="300px"
+                touched={password.touched}
+                valid={password.valid}
+                changed={passwordChangedHandler}
+              />
+              {!password.valid && password.touched ? (
+                <label className={classes.ErrorLabel}>Enter a Password </label>
+              ) : null}
+            </div>
+            <div className={classes.InputContainer}>
+              <label className={classes.Label}>E-mail</label>
+              <Input
+                value={email.value}
+                type="email"
+                placeholder=""
+                width="300px"
+                touched={email.touched}
+                valid={email.valid}
+                changed={emailChangedHandler}
+              />
+              {!email.valid && email.touched ? <label className={classes.ErrorLabel}>Enter an Email </label> : null}
+            </div>
+            <Button clicked={generateOtp} width="200px">
+              Sign Up
+            </Button>
+            <p style={{ marginBottom: 30 }}>
+              Already a user?{" "}
+              <label className={classes.SignIn} onClick={props.signInInstead}>
+                Sign In
+              </label>
+            </p>
+          </React.Fragment>
+      }
     </div>
   );
 };

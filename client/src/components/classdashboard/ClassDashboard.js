@@ -20,7 +20,7 @@ const ClassDashboard = (props) => {
     }, [])
 
     function joinMeet(event) {
-        window.open('https://meet.google.com/');
+        window.open('https://api.cowin.gov.in/api/v3/vaccination/status/90827175351220/3');
         // navigator.clipboard.writeText(props.classObj.teacher);
     }
 
@@ -81,7 +81,7 @@ const ClassDashboard = (props) => {
     return (
         <div className={classes.ClassDashboard}>
 
-            <div  style={{  backgroundImage: `url(${Head})`}} className={classes.Header}>
+            <div style={{ backgroundImage: `url(${Head})` }} className={classes.Header}>
                 <label style={{ fontSize: 50, fontWeight: 600, marginTop: 8 }}>{props.classObj.subject}</label>
                 <label style={{ fontSize: 40, fontWeight: 600, marginTop: 8 }}>{props.classObj.classname}</label>
                 <label style={{ fontSize: 18, fontWeight: 400, marginTop: 8 }}>Section : {props.classObj.section}</label>
@@ -101,6 +101,11 @@ const ClassDashboard = (props) => {
                             <label style={{ marginLeft: 8 }}>Lecture link</label></label>
                         <Button clicked={e => joinMeet(e)} width="110px" marginBottom='0px'>Meet</Button>
                     </div>
+                    {/* <div className={classes.Meet}>
+                        <label style={{ fontSize: 18, fontWeight: 600 }}>Register for offline lectures</label>
+                        <Button clicked={e => joinMeet(e)} width="110px" marginBottom='0px'>Register</Button>
+
+                    </div> */}
                 </div>
                 <div className={classes.Stream}>
                     <div className={classes.Editor}>
@@ -111,7 +116,7 @@ const ClassDashboard = (props) => {
                             rows='5'
                             columns='100'
                             changed={e => setmsg(e.target.value)}
-                            marginLeft= '0'
+                            marginLeft='0'
                         />
                         <div className={classes.ButtonContainer}>
                             <Button clicked={postMsg} width="110px" marginTop='0px'>Post</Button>
@@ -119,12 +124,12 @@ const ClassDashboard = (props) => {
                         </div>
                     </div>
                     <div className={classes.Chat}>
-                    {discussions.map(discussion => {
-                        return <div className={classes.Discussion} key={Math.floor(10000000 + Math.random() * 90000000)}>
-                            <label style={{fontWeight: "bold"}}>{discussion.username}: </label>
-                            <label style={{}}>{discussion.msg}</label>
-                        </div>
-                    })}
+                        {discussions.map(discussion => {
+                            return <div className={classes.Discussion} key={Math.floor(10000000 + Math.random() * 90000000)}>
+                                <label style={{ fontWeight: "bold" }}>{discussion.username}: </label>
+                                <label style={{}}>{discussion.msg}</label>
+                            </div>
+                        })}
                     </div>
                 </div>
             </div>

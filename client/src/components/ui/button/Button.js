@@ -32,6 +32,9 @@ const Button = (props) => {
     if(props.marginLeft){
         style['marginLeft'] = props.marginLeft;
     }
+    if(props.borderColor){
+        style['borderColor'] = props.borderColor;
+    }
 
     let attachedClasses = [classes.button];
     if(props.type==="Secondary"){

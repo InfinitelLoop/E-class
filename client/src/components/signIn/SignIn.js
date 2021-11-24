@@ -63,10 +63,6 @@ const SignIn = (props) => {
                             if (password.value === decryptPassword(usersList[index].password)) {
                                 passwordCorrect = true;
                                 signInUser();
-                                dispatch({
-                                    type: actionType.SHOW_SUCCESS_TOASTER,
-                                    payload: "Signed in successfully"
-                                })
                                 setUsername(initialState);
                                 setPassword(initialState);
                                 break;
