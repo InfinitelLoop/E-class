@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require("body-parser");
 var cors = require("cors");
+var csrf = require("csurf");
+var admin = require("firebase-admin");
+var serviceAccount = require("./serviceAccountKey.json");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -14,6 +17,13 @@ var scheduleRouter = require('./routes/schedule');
 var offlineRouter = require('./routes/offline');
 
 var app = express();
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://e-class-40901-default-rtdb.asia-southeast1.firebasedatabase.app"
+// })
+
+// const csrfMiddleware = csrf({cookie: true});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

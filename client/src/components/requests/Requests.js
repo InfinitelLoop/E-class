@@ -142,7 +142,7 @@ const Requests = (props) => {
                                         <Button clicked={e => decline(request)} width="110px" height='24px' backgroundColor="#c00" borderColor="#c00">Decline</Button>
                                     </div>
                                 </div>
-                            }) : <label>No Pending Requests</label>
+                            }) : <label className={classes.Label}>No Pending Requests.</label>
                         }
                     </div>
                 </React.Fragment>

@@ -189,7 +189,7 @@ const RegistrationForm = (props) => {
                         </div> :
                         <React.Fragment>
                             <div className={classes.Header}>
-                                <label>Register for Offline Lecture</label>
+                                <label>Register for an offline Lecture</label>
                                 <label>Available seats: {seats}</label>
                             </div>
                             <div className={classes.RegistrationForm}>

@@ -53,3 +53,12 @@
     width: 40%;
     text-align: center;
 }
+.Label{
+    font-weight: 400;
+    font-size: 20px;
+    color: #515151;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}

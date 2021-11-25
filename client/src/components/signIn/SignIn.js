@@ -7,6 +7,7 @@ import Input from '../ui/input/Input';
 import Button from '../ui/button/Button';
 import axios from 'axios';
 import actionType from '../../store/actionType';
+import fire from '../../firebase/Fire';
 
 const SignIn = (props) => {
     let initialState = {
@@ -50,6 +51,8 @@ const SignIn = (props) => {
     }
 
     function signIn() {
+
+        
         axios.get('http://localhost:3001/users')
             .then(res => {
 
