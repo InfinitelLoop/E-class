@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# E-CLASS (Microsoft Engage'21)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Problem Statement
 
-## Available Scripts
+ Build a functional prototype of a platform that gives students an array of digital academic and social tools to stay engaged with their studies, peers and broader university community during pandemic.
 
-In the project directory, you can run:
+### Agile Methodology and Approach to Build the Project
+I have followed Agile Scrum Methodology to build this project.
+Agile Scrum Methodology is a project management method that is best used to improve the project in every iteration. Each iteration has sprints, where the goal in each sprint is to build the most important feature first and then improve the project as a potentially deliverable product.
 
-### `npm start`
+Microsoft has provided us with sprints: Learn, Design, Build, Submit. 
+I also used a scrum board on trello to track my progress during ongoing sprints.
 
-Runs the app in the development mode.\
+I divided my project in three sprints of one week each. They are:
+
+### Sprint 1
+* Idea Brainstorming and finalization, R&D on the selected idea.
+* Project setup with React(frontend), Node.j-Express(backend), and Firebase(database).
+* Landing Page, Home Page and basic styling.
+* SignUp, SignIn and Otp modals.
+
+### Sprint 2
+* Join and create classes.
+* Modals for actions(Error, Information, Success).
+* Unique class code generator while making a class for joining a class as a student.
+* Dynamic Class cards after creating and joining a class.
+* Class View - Dashboard, Scheduler, People ,and Request/Register.
+* Scheduler - Calendar, class schedule, updating, and deletion by the teacher.
+* Nodemailer functionality for sending emails while signing Up, scheduling classes, and updates.
+
+
+### Sprint 3
+* Class Dashboard
+* Announcements section and make a query section.
+* Color codes for chat section in dashboard for teacher and students.
+* Register for an offline lecture seat in joined class.
+* Student’s request verification, approval and decline by teacher.
+* Unregister from an offline lecture.
+* Mail notifications for seat availability, Request approval and Request Decline.
+##
+## Getting Started
+
+This project is made using React, Node and Express. Kindly follow the below mentioned instructions to run it on your machine.
+
+### Pre-requisites
+
+You need to install [Node.js](https://nodejs.org/en/) to run this project on your local machine. [Node.js](https://nodejs.org/en/) is a completely free, asynchronous event-driven JavaScript runtime.
+
+	
+### Setup
+* Git Clone the Repo or download the Project Zip file.
+* Extract the files on your system. Lets assume you extracted in D drive.\
+Then your path to the project file will be,
+
+```
+D:\E-class
+```
+* Open the folder of the E-Class in your drive, you will see some subfolders and files in it. From there open two folders named as "api" and "client" via vs code seperately in different vs code windows. \
+Your path to the project files for api and client will be ,
+
+```
+D:\E-class\api
+D:\E-class\client
+```
+
+* To run this project, install it locally using npm and run these commands in the vs code terminal for both api and client. 
+
+```
+$ npm install
+$ npm start
+```
+
+* Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##
+## Technologies
+This is Web Development Project build using React(JavaScript library) and Express(Node.js framework).\
+Project is created with:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* React version: ^17.0.2
+* Express version: ~4.16.1
+* DevExtreme version: ^2.7.6
+* Node.js
+* HTML
+* CSS
+* JavaScript
+* Firebase (Database)
+##
 
-### `npm test`
+## Features
+The project provides standardized features for an online classroom. Below are some of the key features :
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* SignUp to application only after submitting OTP over registered email Id.
+* SignIn & Working Panel for students and teachers combined.
+* Quick and easy class creation and join using an auto-generated classcode.
+* Dynamic Class Cards for every joined and created class.
+* Class DashBoard to exchange information, make announcements and dicuss subject with teacher and students.
+* Color codes for students and teacher in class discussion chat.
+* Easy lecture scheduling by teacher via scheduler.
+* Email notifications to all the enrolled students for any event scheduled by teacher thrugh E-Class.
+* Personel Roaster for students to view scheduled lectures and events.
+* Interface to know the Teacher and Enrolled students in class.
+* Register feature for students to request for an offline lecture Seat(Limited seats decided by teacher while creating class).
+* [CoWIN-Share vaccination status](https://cdn-api.co-vin.in/api/v3/vaccination/status/knowYourStatus) API to generate [Share your status](https://api.cowin.gov.in/api/v3/vaccination/status/90827175351220/3) link and submit it to request for an offline seat.
+* Requests feature for teachers to verify the vaccination certificate and approve or decline a request.
+* Clean and easy to navigate UI.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
