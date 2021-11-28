@@ -94,7 +94,7 @@ The project provides standardized features for an online classroom. Below are so
 * SignIn & Working Panel for students and teachers combined.
 * Quick and easy class creation and join using an auto-generated classcode.
 * Dynamic Class Cards for every joined and created class.
-* Class DashBoard to exchange information, make announcements and dicuss subject with teacher and students.
+* Class DashBoard to exchange information, make announcements and discuss subject with teacher and students.
 * Color codes for students and teacher in class discussion chat.
 * Easy lecture scheduling by teacher via scheduler.
 * Email notifications to all the enrolled students for any event scheduled by teacher thrugh E-Class.
