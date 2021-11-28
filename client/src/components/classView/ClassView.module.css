@@ -25,6 +25,8 @@
 }
 
 .SideLink{
+    display: flex;
+    align-items: center;
     font-size: 28px;
     margin: 4px;
     padding: 10px;

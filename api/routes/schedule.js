@@ -69,13 +69,13 @@ router.post("/update-schedules", function (req, res, next) {
                         let intMax = schedulesList.length > 0 ? Math.max(...idList) : 0;
                         schedulesList.push({ ...req.body.schedule, id: intMax + 1 });
                         subject = `New Lecture Scheduled!`;
-                        body= `
+                        body = `
     Hello,
 
     A new lecture has been scheduled for class ${classObj.classname}.
     Check your class for details.
     
-    Regards.
+    Regards,
     Team E-Class`
 
                         break;
@@ -89,13 +89,13 @@ router.post("/update-schedules", function (req, res, next) {
                         }
                         );
                         subject = `Lecture schedule updated!`;
-                        body= `
+                        body = `
     Hello,
 
     Lecture schedule has been updated for class ${classObj.classname}.
     Check your class for details.
     
-    Regards.
+    Regards,
     Team E-Class`
 
                         break;
@@ -103,13 +103,13 @@ router.post("/update-schedules", function (req, res, next) {
                     case 'DELETE':
                         schedulesList = schedulesList.filter(schedule => schedule.id !== req.body.schedule);
                         subject = `Lecture cancelled!`;
-                        body= `
+                        body = `
     Hello,
 
     A Scheduled lecture has been cancelled for class ${classObj.classname}.
     Check your class for details.
     
-    Regards.
+    Regards,
     Team E-Class`
 
                         break;
@@ -132,7 +132,9 @@ router.post("/update-schedules", function (req, res, next) {
                             schedules: schedulesList
                         });
                     })
-                    .catch(err => res.send("ERROR"));
+                    .catch(err => res.send({
+                        status: "ERROR"
+                    }))
 
 
             } else {

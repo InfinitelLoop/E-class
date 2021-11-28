@@ -7,6 +7,7 @@ import Input from '../ui/input/Input';
 import Button from '../ui/button/Button';
 import axios from 'axios';
 import actionType from '../../store/actionType';
+import SignInLogo from '../../assets/images/signIn.svg';
 import fire from '../../firebase/Fire';
 
 const SignIn = (props) => {
@@ -22,7 +23,7 @@ const SignIn = (props) => {
 
     const dispatch = useDispatch();
 
-    let attachedClass = [classes.SignInModal];
+    let attachedClass = [classes.Wrapper];
     if (props.visible) {
         attachedClass.push(classes.Visible);
     }
@@ -52,7 +53,7 @@ const SignIn = (props) => {
 
     function signIn() {
 
-        
+
         axios.get('http://localhost:3001/users')
             .then(res => {
 
@@ -127,21 +128,26 @@ const SignIn = (props) => {
 
     return (
         <div className={attachedClass.join(' ')}>
-            <h2 style={{ marginTop: 30 }}>Sign in to your account</h2>
-            <div className={classes.InputContainer}>
-                <label className={classes.Label}>Username</label>
-                <Input ref={inputRef} type="text" value={username.value} placeholder='' changed={usernameChangedHandler} width="300px" touched={username.touched} valid={username.isValid} />
-                {!username.isValid && username.touched ? <label className={classes.ErrorLabel}>This is a required field.</label> : null}
+            <div className={classes.Image}>
+                <img src={SignInLogo} alt="" style={{ width: 570 }} />
             </div>
-            <div className={classes.InputContainer}>
-                <label className={classes.Label}>Password</label>
-                <Input type="password" value={password.value} placeholder='' changed={passwordChangedHandler} width="300px" touched={password.touched} valid={password.isValid} enterEvent={signIn}/>
-                {!password.isValid && password.touched ? <label className={classes.ErrorLabel}>This is a required field.</label> : null}
+            <div className={classes.SignInModal}>
+                <h2 style={{ marginTop: 30 }}>Sign in to your account</h2>
+                <div className={classes.InputContainer}>
+                    <label className={classes.Label}>Username</label>
+                    <Input ref={inputRef} type="text" value={username.value} placeholder='' changed={usernameChangedHandler} width="300px" touched={username.touched} valid={username.isValid} />
+                    {!username.isValid && username.touched ? <label className={classes.ErrorLabel}>This is a required field.</label> : null}
+                </div>
+                <div className={classes.InputContainer}>
+                    <label className={classes.Label}>Password</label>
+                    <Input type="password" value={password.value} placeholder='' changed={passwordChangedHandler} width="300px" touched={password.touched} valid={password.isValid} enterEvent={signIn} />
+                    {!password.isValid && password.touched ? <label className={classes.ErrorLabel}>This is a required field.</label> : null}
+                </div>
+
+                <Button clicked={signIn} width="200px">Sign In</Button>
+                <p style={{ marginBottom: 30 }}>New to E-class? <label className={classes.SignUp} onClick={props.signUpInstead}> Sign Up</label></p>
+
             </div>
-
-            <Button clicked={signIn} width="200px">Sign In</Button>
-            <p style={{ marginBottom: 30 }}>New to E-class? <label className={classes.SignUp} onClick={props.signUpInstead}> Sign Up</label></p>
-
         </div>
     )
 }

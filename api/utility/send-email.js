@@ -19,9 +19,10 @@ function configureMailOptionsForSignup(to, otp) {
         text: `
         Hi,
         E-Class welcomes you! Get ready to learn. 
-        Just one more step. Enter this OTP ${otp} and verify yourself and you're good to go.
+        Just one more step. Enter this OTP ${otp} and verify 
+        yourself and you're good to go.
             
-        Regards.
+        Regards,
         Team E-Class`
 
     };

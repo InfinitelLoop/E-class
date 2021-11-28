@@ -7,11 +7,14 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import actionType from '../../store/actionType';
 import Head from '../../assets/images/head.svg';
+import copy from '../../assets/images/copy.svg';
+
 
 const ClassDashboard = (props) => {
 
     const [msg, setmsg] = useState("");
     const [discussions, setdiscussions] = useState([]);
+    const [copied, setCopied] = useState(false);
     const username = useSelector(state => state.auth.username)
     const dispatch = useDispatch();
 
@@ -20,8 +23,11 @@ const ClassDashboard = (props) => {
     }, [])
 
     function joinMeet(event) {
-        window.open('https://api.cowin.gov.in/api/v3/vaccination/status/90827175351220/3');
-        // navigator.clipboard.writeText(props.classObj.teacher);
+        window.open('https://apps.google.com/meet/');
+    }
+    function copyCode() {
+        navigator.clipboard.writeText(props.classObj.classCode);
+        setCopied(true);
     }
 
     function refreshDiscussion() {
@@ -92,7 +98,11 @@ const ClassDashboard = (props) => {
                 <div className={classes.SideView}>
                     <div className={classes.ClassCode}>
                         <label style={{ fontSize: 18, fontWeight: 600 }}> Class code</label>
-                        <label style={{ marginTop: 8 }}> {props.classObj.classCode} </label>
+                        <label style={{ marginTop: 8, display: "flex", justifyContent: "space-between", cursor: 'pointer' }}>
+                            <label style={{fontSize: 24}}> {props.classObj.classCode} </label> 
+                            <img style={{}} src={copy} alt='copy' onClick ={copyCode}/>
+                        </label>
+        {copied ? <label style={{color: 'green', marginTop: 10, fontWeight: 600}}>Copied</label> : null}
                     </div>
                     <div className={classes.Meet}>
                         <label style={{
@@ -117,6 +127,9 @@ const ClassDashboard = (props) => {
                             columns='100'
                             changed={e => setmsg(e.target.value)}
                             marginLeft='0'
+                            marginRight='0'
+                            marginTop='0'
+                            marginBottom='0'
                         />
                         <div className={classes.ButtonContainer}>
                             <Button clicked={postMsg} width="110px" marginTop='0px'>Post</Button>
@@ -126,7 +139,7 @@ const ClassDashboard = (props) => {
                     <div className={classes.Chat}>
                         {discussions.map(discussion => {
                             return <div className={classes.Discussion} key={Math.floor(10000000 + Math.random() * 90000000)}>
-                                <label style={{ fontWeight: "bold" }}>{discussion.username}: </label>
+                                <label style={{ fontWeight: "bold", color: discussion.color}}>{discussion.username}: </label>
                                 <label style={{}}>{discussion.msg}</label>
                             </div>
                         })}

@@ -20,7 +20,7 @@ router.get("/", function (req, res, next) {
 router.post("/get-otp", function (req, res, next) {
   let otp = codeGenerator();
   let mailOptions = mailer.configureMailOptionsForSignup(req.body.email, otp);
-  mailer.mailEvent(mailOptions, transporter, {res: res, otp: otp});
+  mailer.mailEvent(mailOptions, transporter, { res: res, otp: otp });
 });
 
 // Sign up user

@@ -4,6 +4,10 @@ var axios = require('../axiosFile');
 var codeGenerator = require('../utility/utility');
 
 
+const colors = ["#00FFFF", "#7FFFD4", "#0000FF", "#8A2BE2", "#A52A2A", "#5F9EA0", "#7FFF00", "#D2691E", "#FF7F50", "#6495ED", "#DC143C", "#00008B", "#00FFFF", "#008B8B", "#006400", "#8B008B", "#9932CC", "#FF8C00", "#483D8B", "#FF1493", "#00BFFF", "#1E90FF", "#228B22", "#FFD700"];
+
+
+
 router.post('/create', function (req, res, next) {
 
 
@@ -32,8 +36,13 @@ router.post('/create', function (req, res, next) {
                 subject: req.body.subject,
                 room_no: req.body.room_no,
                 classCode: code,
-                teacher: userObj.name,
-                availableSeats: 25
+                teacher: {
+                    username: userObj.username,
+                    name: userObj.name,
+                    email: userObj.email,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                },
+                availableSeats: req.body.availableSeats
             }
 
             // create class
@@ -51,12 +60,18 @@ router.post('/create', function (req, res, next) {
                                 classCode: code
                             })
                         })
-                        .catch(err => console.log(err))
+                        .catch(err => res.send({
+                            status: "ERROR"
+                        }))
                 })
-                .catch(err => console.log(err))
+                .catch(err => res.send({
+                    status: "ERROR"
+                }))
 
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 
@@ -118,7 +133,9 @@ router.post('/join', function (req, res, next) {
                                     .then(dbRes2 => {
 
                                         let studentsList = classObj.students || [];
-                                        studentsList.push({ name: userObj.name, email: userObj.email, username: userObj.username });
+                                        studentsList.push({
+                                            name: userObj.name, email: userObj.email, username: userObj.username, color: colors[Math.floor(Math.random() * colors.length)]
+                                        });
 
                                         axios.put(`/classes/${classKey}/students.json`, studentsList)
                                             .then(dbRes3 => {
@@ -126,9 +143,13 @@ router.post('/join', function (req, res, next) {
                                                     status: "SUCCESS"
                                                 })
                                             })
-                                            .catch(err => console.log(err))
+                                            .catch(err => res.send({
+                                                status: "ERROR"
+                                            }))
                                     })
-                                    .catch(err => console.log(err))
+                                    .catch(err => res.send({
+                                        status: "ERROR"
+                                    }))
                             } else {
                                 res.send({
                                     status: 'You cannot join a Class created by you'
@@ -140,10 +161,14 @@ router.post('/join', function (req, res, next) {
                             })
                         }
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => res.send({
+                        status: "ERROR"
+                    }))
             }
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 // ClassCards
@@ -209,9 +234,25 @@ router.post('/post-msg', function (req, res, next) {
                 }
             }
 
+            let userColor = "#000000";
+            // fetching color code of the user
+            if (req.body.username === classObj.teacher.username) {
+                userColor = classObj.teacher.color;
+            } else {
+
+                for (let key in classObj.students) {
+                    if (req.body.username.trim() === classObj.students[key].username) {
+                        userColor = classObj.students[key].color;
+                        break;
+                    }
+                }
+            }
+
+
             let obj = {
                 msg: req.body.msg,
-                username: req.body.username
+                username: req.body.username,
+                color: userColor
             }
             let discussionList = classObj.discussion || [];
             discussionList.push(obj);
@@ -221,9 +262,13 @@ router.post('/post-msg', function (req, res, next) {
                         status: "SUCCESS",
                     })
                 })
-                .catch(err => console.log(err))
+                .catch(err => res.send({
+                    status: "ERROR"
+                }))
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 
@@ -242,15 +287,44 @@ router.post('/discussions', function (req, res, next) {
                     classObj = dbRes.data[key];
                     break;
                 }
-            }            
+            }
             res.send({
                 status: "SUCCESS",
                 discussion: classObj.discussion || []
             })
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
+// For fethcing students and teacher of class
+router.post('/people', function (req, res, next) {
+
+    // Fetching class list from firebase
+    axios.get('/classes.json')
+        .then(dbRes => {
+
+            let classObj = {};
+
+            // checking class object with passed class code from frontend
+            for (let key in dbRes.data) {
+                if (req.body.classCode.trim() === dbRes.data[key].classCode) {
+                    classObj = dbRes.data[key];
+                    break;
+                }
+            }
+            res.send({
+                status: "SUCCESS",
+                students: classObj.students || [],
+                teacher:  classObj.teacher
+
+            })
+        })
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
+})
 
 
 

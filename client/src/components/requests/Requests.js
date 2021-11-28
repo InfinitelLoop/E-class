@@ -7,11 +7,14 @@ import { useDispatch } from 'react-redux';
 import Spinner from '../ui/spinner/Spinner';
 import actionType from '../../store/actionType';
 import { customSort } from '../../utility/common';
+import Pending from '../../assets/images/pending-request.svg';
+
 
 const Requests = (props) => {
 
     const [allRequests, setallRequests] = useState([]);
     const [loading, setloading] = useState(true);
+    const [availableSeats, setAvailableSeats] = useState(0)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,6 +32,7 @@ const Requests = (props) => {
                 setloading(false);
                 if (res.data.status === 'SUCCESS') {
                     setallRequests(customSort(res.data.requestList, 'raisedOn'));
+                    setAvailableSeats(res.data.availableSeats);
                 } else {
                     dispatch({
                         type: actionType.SHOW_ERROR_TOASTER,
@@ -124,6 +128,8 @@ const Requests = (props) => {
 
             {loading ? <Spinner /> :
                 <React.Fragment>
+                    <label style={{textAlign: 'right', fontSize: 20, color: availableSeats!==0 ? 'green' : 'red', fontWeight: 600, paddingBottom: 20}}>Available offline seats : {availableSeats}</label>
+
                     <div className={classes.Header}>
                         <label className={classes.col1}>Username</label>
                         <label className={classes.col2}>Raised On</label>
@@ -142,7 +148,10 @@ const Requests = (props) => {
                                         <Button clicked={e => decline(request)} width="110px" height='24px' backgroundColor="#c00" borderColor="#c00">Decline</Button>
                                     </div>
                                 </div>
-                            }) : <label className={classes.Label}>No Pending Requests.</label>
+                            }) : <label className={classes.Label}>
+                                <p>No Pending Requests!</p>
+                                <img src={Pending} alt="" style={{width: 450}} />
+                               </label>
                         }
                     </div>
                 </React.Fragment>

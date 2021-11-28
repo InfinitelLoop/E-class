@@ -32,7 +32,9 @@ router.post('/', function (req, res, next) {
                 availableSeats: classObj.availableSeats
             })
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 
 });
 
@@ -88,7 +90,9 @@ router.post('/request-status', function (req, res, next) {
                 })
             }
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 
 });
 
@@ -130,9 +134,13 @@ router.post('/request', function (req, res, next) {
                         status: "SUCCESS",
                     })
                 })
-                .catch(err => console.log(err))
+                .catch(err => res.send({
+                    status: "ERROR"
+                }))
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 
@@ -145,8 +153,8 @@ router.post('/approve', function (req, res, next) {
             // Fetching class list from firebase
             let classObj = {};
             let classKey = 0;
-            let subject ='';
-            let body='';
+            let subject = '';
+            let body = '';
             let classList = dbRes.data;
 
             // checking class object with passed class code from frontend
@@ -158,9 +166,9 @@ router.post('/approve', function (req, res, next) {
                 }
             }
 
-            if(classObj.availableSeats > 0){
+            if (classObj.availableSeats > 0) {
                 let requestList = classObj.request.filter(request => request.username !== req.body.username);
-                let availableSeats = classObj.availableSeats-1;
+                let availableSeats = classObj.availableSeats - 1;
 
                 let studentObj = classObj.students.filter(item => item.username === req.body.username);
                 let offlineStudents = classObj.offlineStudents || [];
@@ -171,38 +179,43 @@ router.post('/approve', function (req, res, next) {
                 classObj.availableSeats = availableSeats;
 
                 subject = `Request Approved!`;
-                body= `
+                body = `
     Hello ${studentObj[0].name},
 
     Your request for attending an offine lecture for class
     ${classObj.classname} has been approved by your teacher as you're fully
     vaccinated.
-    You can now attend the scheduled lectures of this class in-preson.
+    You can now attend the scheduled lectures of this class 
+    in-preson.
 
     
-    Regards.
+    Regards,
     Team E-Class`
 
                 axios.put(`/classes/${classKey}.json`, classObj)
-                .then(dbRes => {
-                    let mailOptions = mailer.configureMailOptionsForOfflineLectures(studentObj[0].email, body, subject);
-                    mailer.requestEvent(mailOptions, transporter, {res: res} )
+                    .then(dbRes => {
+                        let mailOptions = mailer.configureMailOptionsForOfflineLectures(studentObj[0].email, body, subject);
+                        mailer.requestEvent(mailOptions, transporter, { res: res })
 
-                   res.send({
-                       status: 'SUCCESS'
-                   })
+                        res.send({
+                            status: 'SUCCESS'
+                        })
 
-                })
-                .catch(err => console.log(err))
+                    })
+                    .catch(err => res.send({
+                        status: "ERROR"
+                    }))
             } else {
-                
+
                 res.send({
                     status: "Seats Full",
                 })
             }
 
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 
@@ -229,15 +242,15 @@ router.post('/decline', function (req, res, next) {
 
             let requestList = classObj.request.filter(request => request.username !== req.body.username);
             let studentObj = [];
-            for(let index in classObj.students){
-                if(classObj.students[index].username === req.body.username){
+            for (let index in classObj.students) {
+                if (classObj.students[index].username === req.body.username) {
                     studentObj = classObj.students[index];
                 }
             }
             // let studentObj = classObj.students.filter(item => item.username === req.body.username);
 
             let subject = `Request Declined!`;
-            let body= `
+            let body = `
     Hello ${studentObj.username},
 
     Your request for attending an offine lecture for class 
@@ -247,21 +260,25 @@ router.post('/decline', function (req, res, next) {
     vaccinated.
 
     
-    Regards.
+    Regards,
     Team E-Class`
 
             axios.put(`/classes/${classKey}/request.json`, requestList)
                 .then(dbRes => {
                     let mailOptions = mailer.configureMailOptionsForOfflineLectures(studentObj.email, body, subject);
-                    mailer.requestEvent(mailOptions, transporter, {res: res} )
+                    mailer.requestEvent(mailOptions, transporter, { res: res })
                     res.send({
                         status: "SUCCESS",
                     })
                 })
-                .catch(err => console.log(err))
+                .catch(err => res.send({
+                    status: "ERROR"
+                }))
 
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 
@@ -276,8 +293,8 @@ router.post('/unregister', function (req, res, next) {
             // Fetching class list from firebase
             let classObj = {};
             let classKey = 0;
-            let subject ='';
-            let body='';
+            let subject = '';
+            let body = '';
             let classList = dbRes.data;
 
             // checking class object with passed class code from frontend
@@ -289,18 +306,18 @@ router.post('/unregister', function (req, res, next) {
                 }
             }
 
-            if(classObj.availableSeats > 0){
-                let availableSeats = classObj.availableSeats+1;
+            if (classObj.availableSeats > 0) {
+                let availableSeats = classObj.availableSeats + 1;
 
                 let recipientsList = classObj.students.map(item => req.body.username !== item.username ? item.email : '');
 
-                let offlineStudents = classObj.offlineStudents.filter(item => item.username!==req.body.username );
+                let offlineStudents = classObj.offlineStudents.filter(item => item.username !== req.body.username);
 
                 classObj.offlineStudents = offlineStudents;
                 classObj.availableSeats = availableSeats;
 
                 subject = `Offline seat available for ${classObj.classname}!`;
-                body= `
+                body = `
     Hello,
 
     Seats are now available for offline lecture registration for
@@ -311,29 +328,33 @@ router.post('/unregister', function (req, res, next) {
     If registered already, kindly ignore this mail.
 
     
-    Regards.
+    Regards,
     Team E-Class`
 
                 axios.put(`/classes/${classKey}.json`, classObj)
-                .then(dbRes => {
-                    let mailOptions = mailer.configureMailOptionsForOfflineLectures(recipientsList.join(','), body, subject);
-                    mailer.requestEvent(mailOptions, transporter, {res: res} )
+                    .then(dbRes => {
+                        let mailOptions = mailer.configureMailOptionsForOfflineLectures(recipientsList.join(','), body, subject);
+                        mailer.requestEvent(mailOptions, transporter, { res: res })
 
-                   res.send({
-                       status: 'SUCCESS'
-                   })
+                        res.send({
+                            status: 'SUCCESS'
+                        })
 
-                })
-                .catch(err => console.log(err))
+                    })
+                    .catch(err => res.send({
+                        status: "ERROR"
+                    }))
             } else {
-                
+
                 res.send({
                     status: "Seats Full",
                 })
             }
 
         })
-        .catch(err => console.log(err))
+        .catch(err => res.send({
+            status: "ERROR"
+        }))
 })
 
 

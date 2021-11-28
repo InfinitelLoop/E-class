@@ -7,9 +7,9 @@ import Button from '../ui/button/Button';
 import actionType from '../../store/actionType';
 import classes from './RegistrationForm.module.css';
 import Icon from '../../assets/images/vaccine.svg';
-import Approved from '../../assets/images/approved.svg';
+import Approved from '../../assets/images/approved2.svg';
 import Decline from '../../assets/images/decline.svg';
-import Pending from '../../assets/images/pending.svg';
+import Pending from '../../assets/images/approval.svg';
 import Spinner from '../ui/spinner/Spinner';
 
 
@@ -174,29 +174,29 @@ const RegistrationForm = (props) => {
         <div>
             {loading ? <Spinner /> :
                 status === 'pending' ? <div className={classes.Pending}>
-                    <img src={Pending} alt='' style={{ width: 80 }} />
-                    <label>Your request for offline lecture has been submitted.</label>
-                    <label>Request status is pending as of now.</label>
+                    <img src={Pending} alt="" style={{width: 350}} />
+                    <label style={{marginTop: 50}}>Your request for offline lecture has been submitted.</label>
                     <label>You will be notified over your registered e-mail once your teacher approves your request.</label>
                 </div> :
                     status === 'registered' ?
                         <div className={classes.Registered}>
-                            <img src={Approved} alt='' style={{ width: 80 }} />
-                            You've Registered for an offline Lecture.
-                            <Button clicked={unregister} width="200px">
+                            <img src={Approved} alt='' style={{ width: 300 }} />
+                            <label style={{marginTop: 50}}>You've Registered for an offline Lecture.</label>
+                            <p style={{fontSize: 20, marginTop: 30}}> If you cannot attend the offline lecture, kindly unregister so that other students can get the seat.</p>
+                            <Button clicked={unregister} width="200px" marginTop ="40px">
                                 Unregister
                             </Button>
                         </div> :
                         <React.Fragment>
                             <div className={classes.Header}>
                                 <label>Register for an offline Lecture</label>
-                                <label>Available seats: {seats}</label>
+                                <label style={{fontSize: 30, marginTop: 20, color: seats===0? 'red' : 'green' }}>Available seats: {seats}</label>
                             </div>
                             <div className={classes.RegistrationForm}>
                                 <div className={classes.Instructions}>
                                     <label style={{ padding: 12, textAlign: "center", fontSize: 26, fontWeight: 600 }}>Steps to get your vaccination status link</label>
                                     <ul>
-                                        <li style={{ padding: 12 }}>Go to <a>Co-WIN portal</a> and select 'Share Vaccination Status'.</li>
+                                        <li style={{ padding: 12 }}>Go to <a href="https://cdn-api.co-vin.in/api/v3/vaccination/status/knowYourStatus" target="_blank">CoWIN portal</a> and select 'Share Vaccination Status'.</li>
                                         <li style={{ padding: 12 }}>Enter your details and click on 'Get OTP' button.</li>
                                         <li style={{ padding: 12 }}>Enter the recieved OTP and submit.</li>
                                         <li style={{ padding: 12 }}>Click 'Share vaccination status in you social circle'.</li>

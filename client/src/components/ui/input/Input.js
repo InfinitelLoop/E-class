@@ -55,7 +55,7 @@ const Input = React.forwardRef((props, ref) => {
 
 
     function performEnterEvent(e){
-        if(e.key==='Enter'){
+        if( props.enterEvent && e.key==='Enter'){
             props.enterEvent()
         }
     }

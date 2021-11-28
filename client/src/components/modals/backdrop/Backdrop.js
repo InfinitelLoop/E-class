@@ -4,7 +4,7 @@ const Backdrop = (props) => {
   return (
     <div
       style={{
-        backgroundColor: "rgb(0,0,0,0.6)",
+        backgroundColor: "#e3e3e300",
         position: "fixed",
         display: "flex",
         justifyContent: "center",

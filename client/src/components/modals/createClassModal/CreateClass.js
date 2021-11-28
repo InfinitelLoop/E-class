@@ -18,6 +18,7 @@ const CreateClass = (props) => {
   const [subject, setSubject] = useState(initialState);
   const [section, setSection] = useState(initialState);
   const [roomNo, setRoomNo] = useState(initialState);
+  const [availableSeats, setAvailableSeats] = useState(initialState);
 
 
   const username = useSelector(state => state.auth.username);
@@ -41,6 +42,11 @@ const CreateClass = (props) => {
       case "room_no":
         validateInput(value, key);
         break;
+
+      case "seats":
+          validateInput(value, key);
+          break;
+          
       default:
         break;
     }
@@ -88,6 +94,17 @@ const CreateClass = (props) => {
         updatedRoomNo.valid = updatedRoomNo.value.trim() === "" ? false : true;
         setRoomNo(updatedRoomNo);
         break;
+
+      case "seats":
+        let seats = { ...availableSeats };
+        seats.value = value;
+        if (!seats.touched) {
+          seats.touched = true;
+        }
+        seats.valid = seats.value.trim() === "" ? false : true;
+        setAvailableSeats(seats);
+        break;
+
       default:
         break;
     }
@@ -98,6 +115,7 @@ const CreateClass = (props) => {
     setRoomNo(initialState);
     setSection(initialState);
     setSubject(initialState);
+    setAvailableSeats(initialState);
     props.closeModal();
   }
 
@@ -109,7 +127,9 @@ const CreateClass = (props) => {
         section: section.value,
         subject: subject.value,
         room_no: roomNo.value,
-        username: username
+        availableSeats: availableSeats.value,
+        username: username,
+
       }
   
       axios.post('http://localhost:3001/classes/create', obj)
@@ -171,6 +191,14 @@ const CreateClass = (props) => {
       setRoomNo(updatedState);
       isValid = false;
     }
+    if(availableSeats.value.trim()===''){
+      let updatedState = {...availableSeats};
+      updatedState.valid = false;
+      updatedState.touched = true;
+      setAvailableSeats(updatedState);
+      isValid = false;
+    }
+
     return isValid;
   }
 
@@ -229,6 +257,20 @@ const CreateClass = (props) => {
         />
         {!roomNo.valid && roomNo.touched ? <label className={classes.ErrorLabel}>Required Field</label> : null}
       </div>
+      <div className={classes.InputContainer}>
+        <label className={classes.Label}>Offline Seats</label>
+        <Input
+          value={availableSeats.value}
+          type="text"
+          placeholder=""
+          width="300px"
+          touched={availableSeats.touched}
+          valid={availableSeats.valid}
+          changed={(event) => inputChangedHandler(event, "seats")}
+        />
+        {!availableSeats.valid && availableSeats.touched ? <label className={classes.ErrorLabel}>Required Field</label> : null}
+      </div>
+
       <div className={classes.ButtonContainer}>
         <Button clicked={close} width="100px" marginBottom='28px' type='Secondary'>
           Cancel

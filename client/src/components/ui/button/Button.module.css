@@ -33,12 +33,12 @@
 .secondary{
     background-color: #e3e3e3;
     color: #185473;
-    border: 1px solid #c4c4c4;
+    border: 1px solid #d4d4d4;
     border: 1px solid #04345c;
 }
 
 .secondary:hover {
-    background-color: #d4d4d4;
+    background-color: #f3f3f3;
     transform: translateY(-4px);
 }
 
